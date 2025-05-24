@@ -40,6 +40,11 @@ Thumbs.db
 *.njsproj
 *.sln
 
+# SQLite database
+*.sqlite
+*.sqlite3
+backend/generated/prisma/
+
 # Miscellaneous
 *.swp
 *.swo

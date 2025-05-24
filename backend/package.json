@@ -2,23 +2,32 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "Backend for CareLuLu programming challenge",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index"
+    "dev": "tsx watch src/app.ts",
+    "start": "tsx src/app.ts",
+    "build": "tsc",
+    "migrate": "npx prisma migrate dev --name init"
   },
   "author": "Josh Matthew Talplacido",
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.12.1",
     "@as-integrations/express5": "^1.0.0",
+    "@prisma/client": "^6.8.2",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "graphql": "^16.11.0",
-    "pg": "^8.16.0",
-    "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.7"
+    "graphql": "^16.11.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.2",
+    "@types/node": "^22.15.21",
+    "eslint": "^9.27.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.5.3",
+    "prisma": "^6.8.2",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
   }
 }
