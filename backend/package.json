@@ -13,10 +13,13 @@
   "dependencies": {
     "@apollo/server": "^4.12.1",
     "@as-integrations/express5": "^1.0.0",
+    "@graphql-tools/load-files": "^7.0.1",
     "@prisma/client": "^6.8.2",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "graphql": "^16.11.0"
+    "graphql": "^16.11.0",
+    "reflect-metadata": "^0.2.2",
+    "type-graphql": "^2.0.0-rc.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.18",
