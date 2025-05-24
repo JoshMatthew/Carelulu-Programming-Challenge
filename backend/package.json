@@ -1,0 +1,24 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend for CareLuLu programming challenge",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index"
+  },
+  "author": "Josh Matthew Talplacido",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.12.1",
+    "@as-integrations/express5": "^1.0.0",
+    "express": "^5.1.0",
+    "graphql": "^16.11.0",
+    "pg": "^8.16.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
