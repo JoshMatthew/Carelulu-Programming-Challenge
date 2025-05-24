@@ -5,7 +5,7 @@ import cors from 'cors';
 import { ApolloServer } from '@apollo/server';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import { expressMiddleware } from '@as-integrations/express5';
-import { createSchema } from './lib/graphql-schema';
+import { createSchema } from './graphql/schema';
 import config from './config/config';
 
 async function main() {

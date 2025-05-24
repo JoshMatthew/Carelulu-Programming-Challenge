@@ -1,5 +1,5 @@
 import { Resolver, Query, Mutation, Arg, Int } from 'type-graphql';
-import { PrismaClient } from '../../generated/prisma';
+import { PrismaClient } from '../../../generated/prisma';
 import { Task } from '../models/Task';
 import { CreateTaskInput, UpdateTaskInput } from '../models/TaskInput';
 
