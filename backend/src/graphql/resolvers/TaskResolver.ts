@@ -41,7 +41,7 @@ export class TaskResolver {
 
     return await prisma.task.update({
       where: { id },
-      data,
+      data: toUpdate,
     });
   }
 
