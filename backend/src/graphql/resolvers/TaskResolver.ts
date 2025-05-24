@@ -40,7 +40,7 @@ export class TaskResolver {
     if (completed !== undefined) toUpdate.completed = completed;
 
     return await prisma.task.update({
-      where: { id },
+      where: { id: Number(id) },
       data: toUpdate,
     });
   }
