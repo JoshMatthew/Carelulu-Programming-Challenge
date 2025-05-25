@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Arg, Int } from 'type-graphql';
+import { Resolver, Query, Mutation, Arg, Int, ID } from 'type-graphql';
 import { PrismaClient } from '../../../generated/prisma';
 import { Task } from '../models/Task';
 import { CreateTaskInput, UpdateTaskInput } from '../models/TaskInput';
@@ -7,6 +7,15 @@ const prisma = new PrismaClient();
 
 @Resolver(() => Task)
 export class TaskResolver {
+  @Query(() => Task)
+  async task(@Arg('id', () => Int) id: number): Promise<Task | null> {
+    return await prisma.task.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+  }
+
   @Query(() => [Task])
   async allTask(): Promise<Task[]> {
     const tasks = await prisma.task.findMany();
@@ -18,7 +27,7 @@ export class TaskResolver {
 
   @Mutation(() => Task)
   async createTask(
-    @Arg('data', () => CreateTaskInput) data: CreateTaskInput
+    @Arg('data', () => CreateTaskInput) data: CreateTaskInput,
   ): Promise<Task> {
     return await prisma.task.create({
       data: {
@@ -30,13 +39,14 @@ export class TaskResolver {
 
   @Mutation(() => Task)
   async updateTask(
-    @Arg('data', () => UpdateTaskInput) data: UpdateTaskInput
+    @Arg('data', () => UpdateTaskInput) data: UpdateTaskInput,
   ): Promise<Task> {
-    const {taskTitle, taskDescription, completed, id} = data;
+    const { taskTitle, taskDescription, completed, id } = data;
     const toUpdate: any = {};
 
     if (taskTitle !== undefined) toUpdate.task_title = taskTitle;
-    if (taskDescription !== undefined) toUpdate.task_description = taskDescription;
+    if (taskDescription !== undefined)
+      toUpdate.task_description = taskDescription;
     if (completed !== undefined) toUpdate.completed = completed;
 
     return await prisma.task.update({
