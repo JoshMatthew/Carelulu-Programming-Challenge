@@ -12,10 +12,10 @@ datasource db {
 }
 
 model Task {
-  id               Int    @id @default(autoincrement())
+  id               Int      @id @default(autoincrement())
   task_title       String
-  task_description String?
-  completed        Boolean @default(false)
+  task_description String?  @default("")
+  completed        Boolean  @default(false)
   createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt @default(now())
+  updatedAt        DateTime @default(now()) @updatedAt
 }
