@@ -1,3 +1,4 @@
+import { MaxLength } from 'class-validator';
 import { ObjectType, Field, ID } from 'type-graphql';
 
 @ObjectType()
@@ -6,6 +7,7 @@ export class Task {
   id!: number;
 
   @Field(() => String)
+  @MaxLength(60)
   task_title!: string;
 
   @Field(() => String, { nullable: true })

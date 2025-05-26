@@ -1,9 +1,7 @@
 import { Resolver, Query, Mutation, Arg, Int, ID } from 'type-graphql';
-import { PrismaClient } from '../../../generated/prisma';
 import { Task } from '../models/Task';
 import { CreateTaskInput, UpdateTaskInput } from '../models/TaskInput';
-
-const prisma = new PrismaClient();
+import { prisma } from '../../lib/constants';
 
 @Resolver(() => Task)
 export class TaskResolver {
@@ -33,6 +31,7 @@ export class TaskResolver {
       data: {
         task_title: data.taskTitle,
         task_description: data.taskDescription,
+        userId: 1,
       },
     });
   }

@@ -7,6 +7,8 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import { expressMiddleware } from '@as-integrations/express5';
 import { createSchema } from './graphql/schema';
 import config from './config/config';
+const bcrypt = require('bcrypt');
+import { prisma } from './lib/constants';
 
 async function main() {
   const app = express();
@@ -27,7 +29,7 @@ async function main() {
     express.json(),
     expressMiddleware(server, {
       context: async ({ req }) => ({ token: req.headers.token }),
-    })
+    }),
   );
 
   httpServer.listen(config.port, () => {
