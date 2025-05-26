@@ -15,8 +15,9 @@ export default {
           "Segoe UI Symbol",
           "Noto Color Emoji",
         ],
+        lexend: ["Lexend", "sans-serif"],
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/container-queries")],
 } satisfies Config;

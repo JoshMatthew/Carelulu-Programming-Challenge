@@ -2,11 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  background-color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
+@layer components {
+  .extended-click-area {
+    position: relative;
+  }
+
+  .extended-click-area::after {
+    content: '';
+    position: absolute;
+    top: -15px;
+    bottom: -25px;
+    right: -50px;
+    left: 0px;
+  }
+
+  textarea::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  textarea::-webkit-scrollbar-thumb {
+    background-color: #EE2D68;
+    border-radius: 50px;
+  }
+}
+
+
+@layer utilities {
+  .completed {
+    background-color: #787878;
+    color:#cccccc;
+  }
+
+  .completed-main-title {
+    text-decoration: line-through;
+  }
+
+  .debug {
+    outline: 3px red solid;
   }
 }
