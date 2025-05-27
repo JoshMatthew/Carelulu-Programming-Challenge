@@ -1,6 +1,63 @@
-import { Link, Outlet, useFetcher } from "@remix-run/react";
+import { ActionFunction } from "@remix-run/node";
+import { useFetcher } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { LoaderFunction, redirect } from "react-router";
+import { TaskOperations } from "~/lib/types";
+import { authenticator, sessionStorage } from "~/services/auth.server";
+
+export const action: ActionFunction = async ({ request }) => {
+  // const formData = await request.formData();
+
+  console.log("JM", request);
+
+  try {
+    let user = await authenticator.authenticate("user-pass", request);
+    let session = await sessionStorage.getSession(
+      request.headers.get("cookie")
+    );
+
+    session.set("user", user);
+
+    return redirect("/task", {
+      headers: {
+        "Set-Cookie": await sessionStorage.commitSession(session),
+      },
+    });
+    // switch (operation) {
+    //   case TaskOperations.SIGN_IN:
+    //     let user = await authenticator.authenticate("user-pass", request);
+    //     let session = await sessionStorage.getSession(
+    //       request.headers.get("cookie")
+    //     );
+
+    //     session.set("user", user);
+
+    //     return redirect("/task", {
+    //       headers: {
+    //         "Set-Cookie": await sessionStorage.commitSession(session),
+    //       },
+    //     });
+
+    //   default:
+    //     return redirect("/task");
+    // }
+  } catch (error) {
+    if (error instanceof Error) {
+      return { error: error.message };
+    }
+
+    throw error;
+  }
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+  let session = await sessionStorage.getSession(request.headers.get("cookie"));
+  let user = session.get("user");
+
+  if (user) return redirect("/task");
+
+  return null;
+};
 
 export default function Index() {
   const fetcher = useFetcher();
@@ -26,7 +83,12 @@ export default function Index() {
           className="@md:rounded-md mx-auto flex items-center overflow-hidden w-full @md:w-auto flex-col gap-2"
         >
           <input
-            name="username"
+            type="hidden"
+            name="operation"
+            value={TaskOperations.SIGN_UP}
+          />
+          <input
+            name="email"
             type="text"
             className="bg-[#ffffff] text-black px-4 py-2 border-2 w-full outline-none border-[#4FBBBB] font-lexend"
             placeholder="Username"
@@ -65,17 +127,24 @@ export default function Index() {
           preventScrollReset
           className="@md:rounded-md mx-auto flex items-center overflow-hidden w-full @md:w-auto flex-col gap-2"
         >
+          {/* <input
+            type="hidden"
+            name="operation"
+            value={TaskOperations.SIGN_IN}
+          /> */}
           <input
-            name="username"
+            name="email"
             type="text"
             className="bg-[#ffffff] text-black px-4 py-2 border-2 w-full outline-none border-[#4FBBBB] font-lexend"
             placeholder="Username"
+            required
           />
           <input
             name="password"
             type="password"
             className="bg-[#ffffff] text-black px-4 py-2 border-2 w-full outline-none border-[#4FBBBB] font-lexend"
             placeholder="Password"
+            required
           />
           <button
             type="submit"

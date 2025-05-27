@@ -4,20 +4,24 @@ import { useEffect, useRef, useState } from "react";
 import Tag from "~/components/Tag";
 import { useToggle } from "~/components/ToggleContentContext";
 import { GetTaskQuery } from "~/lib/graphql";
-import { client } from "~/lib/graphql-client";
+import { createAuthenticatedGqlClient } from "~/lib/graphql-client";
 import { formatDateToCustomString } from "~/lib/helpers";
 import { TaskOperations } from "~/lib/types";
 import { IoMdClose } from "react-icons/io";
 import { IoIosSave } from "react-icons/io";
 import { MdOutlineDone } from "react-icons/md";
 import { MdDeleteForever } from "react-icons/md";
+import { authenticateUser } from "~/services/auth.server";
 
 export const loader: LoaderFunction = async (args) => {
-  const { params } = args;
+  const { params, request } = args;
+  let user = await authenticateUser(request);
   let _task = null;
 
   try {
-    const { task }: any = await client.request(GetTaskQuery, {
+    const { task }: any = await createAuthenticatedGqlClient(
+      user.token
+    ).request(GetTaskQuery, {
       taskId: Number(params.taskId),
     });
 

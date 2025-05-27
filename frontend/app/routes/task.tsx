@@ -14,9 +14,10 @@ import {
   GetAllTasksQuery,
   UpdateTaskMutation,
 } from "~/lib/graphql";
-import { client } from "~/lib/graphql-client";
+import { createAuthenticatedGqlClient, gqlClient } from "~/lib/graphql-client";
 
 import { TaskOperations } from "~/lib/types";
+import { authenticateUser } from "~/services/auth.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -25,8 +26,12 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader: LoaderFunction = async () => {
-  const { allTask }: any = await client.request(GetAllTasksQuery);
+export const loader: LoaderFunction = async (args) => {
+  let user = await authenticateUser(args.request);
+
+  const { allTask }: any = await createAuthenticatedGqlClient(
+    user.token
+  ).request(GetAllTasksQuery);
 
   return {
     allTask,
@@ -34,9 +39,11 @@ export const loader: LoaderFunction = async () => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
+  let user = await authenticateUser(request);
   const formData = await request.formData();
   const operation = formData.get("operation");
   const id = formData.get("id");
+  const authenticatedGqlClient = createAuthenticatedGqlClient(user.token);
 
   try {
     switch (operation) {
@@ -45,7 +52,7 @@ export const action: ActionFunction = async ({ request }) => {
         if (typeof ct_taskTitle !== "string" || !ct_taskTitle.trim()) {
           return new Response("Invalid task title", { status: 400 });
         }
-        await client.request(CreateTaskMutation, {
+        await authenticatedGqlClient.request(CreateTaskMutation, {
           data: { taskTitle: ct_taskTitle },
         });
         return new Response("Operation Success", { status: 200 });
@@ -58,7 +65,7 @@ export const action: ActionFunction = async ({ request }) => {
           return new Response("Invalid input", { status: 400 });
         }
 
-        await client.request(UpdateTaskMutation, {
+        await authenticatedGqlClient.request(UpdateTaskMutation, {
           data: { id, completed: completedInBoolean },
         });
 
@@ -77,7 +84,7 @@ export const action: ActionFunction = async ({ request }) => {
           return new Response("Invalid input", { status: 400 });
         }
 
-        await client.request(UpdateTaskMutation, {
+        await authenticatedGqlClient.request(UpdateTaskMutation, {
           data: {
             id,
             taskTitle: ut_taskTitle,
@@ -92,14 +99,14 @@ export const action: ActionFunction = async ({ request }) => {
           return new Response("Invalid ID", { status: 400 });
         }
 
-        await client.request(DeleteTaskMutation, {
+        await authenticatedGqlClient.request(DeleteTaskMutation, {
           deleteTaskId: Number(id),
         });
 
         return new Response("Operation Success", { status: 200 });
 
       case TaskOperations.DELETE_ALL_COMPLETED:
-        await client.request(DeleteAllCompletedMutation);
+        await authenticatedGqlClient.request(DeleteAllCompletedMutation);
 
         return new Response("Operation Success", { status: 200 });
 

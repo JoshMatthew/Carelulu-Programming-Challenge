@@ -4,7 +4,7 @@ export function Navbar() {
       <div className="2xl:max-w-[700px] mx-auto w-full flex justify-center items-center h-full">
         <div className="">
           <h1 className="font-lexend font-bold text-white text-2xl">
-            We will take <span className="text-[#F15786]">care</span> of you
+            We will take <span className="text-[#F15786]">care</span> of your
             tasks
           </h1>
         </div>
