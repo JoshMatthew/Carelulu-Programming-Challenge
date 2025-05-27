@@ -1,35 +1,94 @@
-import { Mutation, Resolver } from 'type-graphql';
-import { AuthPayload, User } from '../models/User';
-import { CreateUser } from '../models/UserAuth';
-import { prisma } from '../../lib/constants';
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-
-async function createUser({ parent, args, context }: any) {
-  const password = await bcrypt.hash(args.password, 10);
-
-  const user = await context.prisma.user.create({
-    data: { ...args, password },
-  });
-
-  const token = jwt.sign({ userId: user.id }, 'secret');
-
-  return {
-    token,
-    user,
-  };
-}
+import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
+import { User } from '../models/User';
+import {
+  AuthPayload,
+  SignupUserInput,
+  SigninUserInput,
+} from '../models/UserAuth';
+import { AuthConstants } from '../../lib/constants';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { env } from 'process';
+import { AppContext } from '../../lib/types';
 
 @Resolver(() => User)
 export class UserResolver {
-  // @Mutation(() => AuthPayload)
-  // async signUp(
-  //     @Arg('data', () => CreateUser) data: CreateUser,
-  // ): Promise<AuthPayload> {
-  //     const { username, password } = data;
-  //     const existingUser = await prisma.user.findUnique({ where: { user_name: username } });
-  //     if (existingUser) {
-  //       return res.status(400).json({ error: 'User already exists' });
-  //     }
-  // }
+  @Mutation(() => AuthPayload)
+  async signUp(
+    @Arg('data', () => SignupUserInput) data: SignupUserInput,
+    @Ctx() ctx: AppContext,
+  ): Promise<AuthPayload> {
+    const { username, password } = data;
+    const { prisma } = ctx;
+
+    const existingUser = await prisma.user.findUnique({
+      where: { user_name: username },
+    });
+    if (existingUser) {
+      throw new Error('User already exists');
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await prisma.user.create({
+      data: {
+        user_name: username,
+        password: hashedPassword,
+      },
+    });
+
+    const token = jwt.sign({ userId: user.id }, env.JWT_SECRET, {
+      expiresIn: AuthConstants.AUTH_EXPIRATION,
+    });
+
+    return {
+      token,
+      user,
+    };
+  }
+
+  @Mutation(() => AuthPayload)
+  async signIn(
+    @Arg('data', () => SigninUserInput) data: SigninUserInput,
+    @Ctx() ctx: AppContext,
+  ): Promise<AuthPayload> {
+    const { username, password } = data;
+    const { prisma } = ctx;
+
+    const user = await prisma.user.findUnique({
+      where: { user_name: username },
+    });
+    if (!user) {
+      throw new Error('Username does not exist');
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      throw new Error('Incorrect password');
+    }
+
+    const token = jwt.sign({ userId: user.id }, env.JWT_SECRET, {
+      expiresIn: AuthConstants.AUTH_EXPIRATION,
+    });
+
+    return {
+      token,
+      user,
+    };
+  }
+
+  @Query(() => [User])
+  async getUsers(@Ctx() ctx: AppContext): Promise<User[]> {
+    const { prisma } = ctx;
+    return await prisma.user.findMany();
+  }
+
+  // temporary
+  @Mutation(() => String)
+  async deleteAllUsers(@Ctx() ctx: AppContext): Promise<string> {
+    const { prisma } = ctx;
+    const { count } = await prisma.user.deleteMany({});
+
+    return 'Deleted ' + count + ' users';
+  }
 }

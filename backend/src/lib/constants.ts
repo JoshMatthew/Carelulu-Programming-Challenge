@@ -1,5 +1,5 @@
-import { PrismaClient } from '../../generated/prisma';
+class AuthConstants {
+  static AUTH_EXPIRATION = '24h';
+}
 
-const prisma = new PrismaClient();
-
-export { prisma };
+export { AuthConstants };
