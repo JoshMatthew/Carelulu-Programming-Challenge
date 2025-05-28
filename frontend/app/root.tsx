@@ -12,6 +12,8 @@ import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { ToggleContentProvider } from "./components/ToggleContentContext";
 import { GlobalLoadingBar } from "./components/GlobalLoadingBar";
+import { LoaderFunction, redirect } from "react-router";
+import { sessionStorage } from "~/services/auth.server";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -25,6 +27,17 @@ export const links: LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
 ];
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const session = await sessionStorage.getSession(
+    request.headers.get("cookie")
+  );
+  const user = session.get("user");
+
+  if (user) return { user };
+
+  return null;
+};
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
