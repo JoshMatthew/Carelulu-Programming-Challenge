@@ -4,4 +4,7 @@ export enum TaskOperations {
   UPDATE_TASK = "task-update",
   DELETE_TASK = "delete-task",
   DELETE_ALL_COMPLETED = "delete-all-completed",
+
+  SIGN_IN = "sign-in",
+  SIGN_UP = "sign-up",
 }

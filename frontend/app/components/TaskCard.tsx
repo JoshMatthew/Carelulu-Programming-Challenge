@@ -3,6 +3,7 @@ import CompleterButton from "./CompleterButton";
 import { NavLink } from "@remix-run/react";
 import { ReactNode } from "react";
 import Tag from "./Tag";
+import { useToggle } from "./ToggleContentContext";
 
 export default function TaskCard({
   title,
@@ -15,6 +16,8 @@ export default function TaskCard({
   createdAt: string;
   id: string;
 }) {
+  const { isOn } = useToggle();
+
   return (
     <NavLink
       to={`/task/${id}#${id}`}
@@ -24,7 +27,7 @@ export default function TaskCard({
           ? `border-2 border-[#0e4747]`
           : `hover:bg-[#35bbbb] border-2 border-transparent`) +
         ` ${completed ? "completed hover:bg-[#858585]" : "hover:bg-[#35bbbb]"} 
-      bg-[#23aaaa] w-full @md:w-auto hover:cursor-pointer rounded-md text-white p-4 px-6 flex flex-col items-start transition-all duration-500 ease-in-out card max-w-[400px]`
+      bg-[#23aaaa] w-full hover:cursor-pointer rounded-md text-white p-4 px-6 flex flex-col items-start transition-all duration-500 ease-in-out md:max-w-[400px] w-full md:w-auto`
       }
     >
       <div className="flex gap-2 items-start">

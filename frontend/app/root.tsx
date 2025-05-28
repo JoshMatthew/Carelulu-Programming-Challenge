@@ -11,6 +11,7 @@ import "./tailwind.css";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { ToggleContentProvider } from "./components/ToggleContentContext";
+import { GlobalLoadingBar } from "./components/GlobalLoadingBar";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -46,6 +47,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <ToggleContentProvider>
+          <GlobalLoadingBar />
           <Navbar />
           {children}
           <Footer />

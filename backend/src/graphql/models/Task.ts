@@ -1,5 +1,6 @@
 import { MaxLength } from 'class-validator';
 import { ObjectType, Field, ID } from 'type-graphql';
+import { User } from './User';
 
 @ObjectType()
 export class Task {
@@ -21,4 +22,7 @@ export class Task {
 
   @Field(() => Date)
   updatedAt!: Date;
+
+  @Field(() => User)
+  createdBy!: User;
 }

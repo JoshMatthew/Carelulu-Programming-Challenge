@@ -7,7 +7,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -25,6 +25,6 @@ model Task {
   completed        Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @default(now()) @updatedAt
-  userId           Int
-  user             User     @relation(fields: [userId], references: [id])
+  taskCreatorId    Int
+  createdBy        User     @relation(fields: [taskCreatorId], references: [id])
 }

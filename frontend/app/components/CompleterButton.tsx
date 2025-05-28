@@ -1,4 +1,5 @@
 import { redirect, useFetcher, useNavigate } from "@remix-run/react";
+import { CgSpinner } from "react-icons/cg";
 import { TaskOperations } from "~/lib/types";
 
 export default function CompleterButton({
@@ -19,17 +20,22 @@ export default function CompleterButton({
       />
       <input type="hidden" name="completed" value={Number(!completed)} />
       <input type="hidden" name="id" value={id} />
-      <button
-        onClick={(event) => {
-          event.stopPropagation();
-        }}
-        type="submit"
-        className={`${
-          completed
-            ? "bg-[#303030] border-[#303030] hover:border-white active:bg-white"
-            : "bg-white active:bg-[#303030]"
-        } border-2 border-white h-[1rem] @lg:h-[1.2rem] @xl:h-[1.6rem] aspect-square rounded-full block hover:border-[#303030]`}
-      />
+
+      {fetcher.state === "submitting" ? (
+        <CgSpinner className="animate-spin" />
+      ) : (
+        <button
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
+          type="submit"
+          className={`${
+            completed
+              ? "bg-[#303030] border-[#303030] hover:border-white active:bg-white"
+              : "bg-white active:bg-[#303030]"
+          } border-2 border-white h-[1rem] @lg:h-[1.2rem] @xl:h-[1.6rem] aspect-square rounded-full block hover:border-[#303030]`}
+        />
+      )}
     </fetcher.Form>
   );
 }

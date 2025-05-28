@@ -2,20 +2,22 @@ import { useFetcher } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { TaskOperations } from "~/lib/types";
 import { MdFormatListBulletedAdd } from "react-icons/md";
+import { CgSpinner } from "react-icons/cg";
 
 export default function NewTaskInputArea() {
-  const fetcher = useFetcher();
+  const newTaskFetcher = useFetcher();
+  const deleteTaskFetcher = useFetcher();
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    if (fetcher.state === "idle") {
+    if (newTaskFetcher.state === "idle") {
       formRef.current?.reset();
     }
-  }, [fetcher.state]);
+  }, [newTaskFetcher.state]);
 
   return (
-    <div className="sticky bottom-0 flex justify-center flex-col items-center bg-white py-4">
-      <fetcher.Form
+    <div className="sticky bottom-0 flex justify-center flex-col items-center p-4 bg-white w-full md:w-auto">
+      <newTaskFetcher.Form
         method="post"
         ref={formRef}
         preventScrollReset
@@ -37,11 +39,15 @@ export default function NewTaskInputArea() {
           className="py-[0.1rem] px-4 hover:bg-[#4FBBBB] bg-white text-[#4FBBBB] hover:text-white"
         >
           <span className="text-[2rem] font-bold">
-            <MdFormatListBulletedAdd />
+            {newTaskFetcher.state === "submitting" ? (
+              <CgSpinner className="animate-spin" />
+            ) : (
+              <MdFormatListBulletedAdd />
+            )}
           </span>
         </button>
-      </fetcher.Form>
-      <fetcher.Form
+      </newTaskFetcher.Form>
+      <deleteTaskFetcher.Form
         method="post"
         preventScrollReset
         className="bg-none font-lexend"
@@ -53,11 +59,14 @@ export default function NewTaskInputArea() {
         />
         <button
           type="submit"
-          className="py-2 text-[0.96rem] px-4 mt-4 text-red-700 hover:bg-red-400 bg-red-300 rounded-md"
+          className="py-2 text-[0.96rem] px-4 mt-4 text-red-700 hover:bg-red-400 bg-red-300 rounded-md flex items-center gap-4"
         >
-          Delete all completed task
+          Delete all completed task{" "}
+          {deleteTaskFetcher.state === "submitting" && (
+            <CgSpinner className="animate-spin" />
+          )}
         </button>
-      </fetcher.Form>
+      </deleteTaskFetcher.Form>
     </div>
   );
 }

@@ -7,20 +7,11 @@ export class User {
   id!: number;
 
   @Field(() => String)
-  username!: string;
+  user_name!: string;
 
   @Field(() => String)
   password!: string;
 
   @Field(() => [Task], { nullable: true })
   tasks?: [Task?];
-}
-
-@ObjectType()
-export class AuthPayload {
-  @Field(() => String)
-  token!: string;
-
-  @Field(() => User)
-  user!: User;
 }

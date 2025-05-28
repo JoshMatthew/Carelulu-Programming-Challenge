@@ -1,3 +1,5 @@
+import { PrismaClient } from '@prisma/client';
+
 export type TaskInput = {
   taskTitle: string;
   taskDescription?: string;
@@ -15,3 +17,8 @@ export type TaskUpdateInput = {
   task_description?: string;
   completed?: boolean;
 };
+
+export interface AppContext {
+  userId: number | null;
+  prisma: PrismaClient;
+}

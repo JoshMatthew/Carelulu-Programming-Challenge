@@ -1,7 +1,8 @@
-import { InputType, Field, ID } from 'type-graphql';
+import { InputType, Field, ID, ObjectType } from 'type-graphql';
+import { User } from './User';
 
 @InputType()
-export class LoginUser {
+export class SigninUserInput {
   @Field(() => String)
   username!: string;
 
@@ -10,10 +11,19 @@ export class LoginUser {
 }
 
 @InputType()
-export class CreateUser {
+export class SignupUserInput {
   @Field(() => String)
   username!: string;
 
   @Field(() => String)
   password!: string;
+}
+
+@ObjectType()
+export class AuthPayload {
+  @Field(() => String)
+  token!: string;
+
+  @Field(() => User)
+  user!: User;
 }

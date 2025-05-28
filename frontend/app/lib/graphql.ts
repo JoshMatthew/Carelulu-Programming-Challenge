@@ -55,3 +55,27 @@ export const DeleteAllCompletedMutation = gql`
     deleteAllCompleted
   }
 `;
+
+export const SigninUserMutation = gql`
+  mutation Signin($data: SigninUserInput!) {
+    signIn(data: $data) {
+      token
+      user {
+        user_name
+        id
+      }
+    }
+  }
+`;
+
+export const SignupUserMutation = gql`
+  mutation Signup($data: SignupUserInput!) {
+    signUp(data: $data) {
+      token
+      user {
+        user_name
+        id
+      }
+    }
+  }
+`;

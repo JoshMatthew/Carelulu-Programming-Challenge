@@ -16,6 +16,8 @@
     "@as-integrations/express5": "^1.0.0",
     "@graphql-tools/load-files": "^7.0.1",
     "@prisma/client": "^6.8.2",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.9",
     "bcrypt": "^6.0.0",
     "class-validator": "^0.14.2",
     "dotenv": "^16.5.0",
