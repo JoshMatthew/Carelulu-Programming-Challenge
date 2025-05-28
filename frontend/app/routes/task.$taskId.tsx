@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Tag from "~/components/Tag";
 import { useToggle } from "~/components/ToggleContentContext";
 import { GetTaskQuery } from "~/lib/graphql";
-import { createAuthenticatedGqlClient } from "~/lib/graphql-client";
+import { getAuthenticatedGqlClient } from "~/lib/graphql-client";
 import { formatDateToCustomString } from "~/lib/helpers";
 import { TaskOperations } from "~/lib/types";
 import { IoMdClose } from "react-icons/io";
@@ -16,7 +16,7 @@ import { CgSpinner } from "react-icons/cg";
 
 export const meta: MetaFunction = ({ data }: any) => {
   return [
-    { title: `CareLuLu Programming Challenge | Task #${data.task.id || 0}` },
+    { title: `Task #${data.task.id || 0} | CareLuLu Programming Challenge` },
     {
       property: "og:title",
       content: "Task creator challenge",
@@ -35,11 +35,12 @@ export const loader: LoaderFunction = async (args) => {
   let _task = null;
 
   try {
-    const { task }: any = await createAuthenticatedGqlClient(
-      user.token
-    ).request(GetTaskQuery, {
-      taskId: Number(params.taskId),
-    });
+    const { task }: any = await getAuthenticatedGqlClient(user.token).request(
+      GetTaskQuery,
+      {
+        taskId: Number(params.taskId),
+      },
+    );
 
     _task = task;
   } catch (e) {
@@ -93,19 +94,19 @@ export default function ContentArea() {
       setTitleAreaValue(newValue);
       setShouldUpdate(
         newValue !== originalTitleRef.current ||
-          descTxtAreaValue !== originalDescriptionRef.current
+          descTxtAreaValue !== originalDescriptionRef.current,
       );
     }
   };
 
   const handleDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     const newValue = e.target.value;
     setTextAreaValue(newValue);
     setShouldUpdate(
       newValue !== originalDescriptionRef.current ||
-        titleTxtAreaValue !== originalTitleRef.current
+        titleTxtAreaValue !== originalTitleRef.current,
     );
   };
 
@@ -139,12 +140,12 @@ export default function ContentArea() {
 
   return (
     <>
-      <div className={`bg-[#fdfdfd] shadow-md rounded-md py-12 px-8 relative`}>
+      <div className={`relative rounded-md bg-[#fdfdfd] px-8 py-12 shadow-md`}>
         <button
-          className="active:text-[#aaa] hover:text-[#111] absolute top-4 right-4"
+          className="absolute right-4 top-4 hover:text-[#111] active:text-[#aaa]"
           onClick={close}
         >
-          <IoMdClose className="text-[#F15786] hover:text-[#F26897] text-[1.5rem]" />
+          <IoMdClose className="text-[1.5rem] text-[#F15786] hover:text-[#F26897]" />
         </button>
         {task ? (
           <>
@@ -152,7 +153,7 @@ export default function ContentArea() {
               method="post"
               action="/task"
               preventScrollReset
-              className="absolute top-4 lef-4"
+              className="lef-4 absolute top-4"
             >
               <input
                 type="hidden"
@@ -167,12 +168,12 @@ export default function ContentArea() {
               <input type="hidden" name="id" value={task.id} />
               <button
                 type="submit"
-                className={`active:text-green-400 hover:text-green-500 hover:bg-green-200 flex items-center gap-1 border-[1px] border-color-[#555] hover:border-color-green-800 px-2 py-1 rounded-sm text-[#555] ${
+                className={`border-color-[#555] hover:border-color-green-800 flex items-center gap-1 rounded-sm border-[1px] px-2 py-1 text-[#555] hover:bg-green-200 hover:text-green-500 active:text-green-400 ${
                   task.completed && "bg-green-300 text-green-600"
                 }`}
               >
                 {taskCompleteFetcher.state === "submitting" ? (
-                  <CgSpinner className="text-[0.9rem] animate-spin" />
+                  <CgSpinner className="animate-spin text-[0.9rem]" />
                 ) : (
                   <MdOutlineDone className="text-[0.9rem]" />
                 )}
@@ -188,18 +189,18 @@ export default function ContentArea() {
                 onFocus={() => setTitleTxtAreaIsFocused(true)}
                 spellCheck={titleTxtAreaisFocused}
                 onBlur={handleBlur}
-                className="outline-none overflow-hidden text-[2.2rem] md:text-[3.5rem] leading-tight tracking-tight text-[#008088] pb-4 font-lexend resize-none bg-[#fdfdfd]"
+                className="resize-none overflow-hidden bg-[#fdfdfd] pb-4 font-lexend text-[2.2rem] leading-tight tracking-tight text-[#008088] outline-none md:text-[3.5rem]"
                 placeholder="Enter task title"
                 name="description"
                 maxLength={60}
               />
               {titleTxtAreaError && (
-                <p className="text-red-500 text-sm font-lexend -mt-[1rem] mb-[1rem]">
+                <p className="-mt-[1rem] mb-[1rem] font-lexend text-sm text-red-500">
                   {titleTxtAreaError}
                 </p>
               )}
             </div>
-            <div className="flex gap-2 flex-wrap mb-4">
+            <div className="mb-4 flex flex-wrap gap-2">
               <Tag className="uppercase">#{task.id}</Tag>
               <Tag className="uppercase">
                 Created {formatDateToCustomString(task.createdAt, false)}
@@ -217,7 +218,7 @@ export default function ContentArea() {
             </div>
             <textarea
               ref={descTxtAreaRef}
-              className="decription-textarea w-full bg-[#fefefe] rounded-md border-2 border-s-stone-50 py-2 px-4 text-[#111] font-lexend outline-none min-h-[150px] resize-none text-[0.89rem]"
+              className="decription-textarea min-h-[150px] w-full resize-none rounded-md border-2 border-s-stone-50 bg-[#fefefe] px-4 py-2 font-lexend text-[0.89rem] text-[#111] outline-none"
               value={descTxtAreaValue}
               onChange={handleDescriptionChange}
               onFocus={() => setDescTxtAreaIsFocused(true)}
@@ -226,7 +227,7 @@ export default function ContentArea() {
               placeholder="Task description"
               name="description"
             />
-            <div className="flex gap-4 font-lexend text-[#5e5e5e] text-[0.8rem]">
+            <div className="flex gap-4 font-lexend text-[0.8rem] text-[#5e5e5e]">
               <taskDeleteFetcher.Form
                 method="post"
                 action="/task"
@@ -240,10 +241,10 @@ export default function ContentArea() {
                 <input type="hidden" name="id" value={task.id} />
                 <button
                   type="submit"
-                  className="active:text-[#aaa] text-red-600 hover:text-red-700 flex items-center gap-1"
+                  className="flex items-center gap-1 text-red-600 hover:text-red-700 active:text-[#aaa]"
                 >
                   {taskDeleteFetcher.state === "submitting" ? (
-                    <CgSpinner className="text-[0.9rem] animate-spin" />
+                    <CgSpinner className="animate-spin text-[0.9rem]" />
                   ) : (
                     <MdDeleteForever className="text-[0.9rem]" />
                   )}
@@ -275,7 +276,7 @@ export default function ContentArea() {
                   />
                   <button type="submit" className="flex items-center gap-1">
                     {taskUpdateFetcher.state === "submitting" ? (
-                      <CgSpinner className="text-[0.9rem] animate-spin" />
+                      <CgSpinner className="animate-spin text-[0.9rem]" />
                     ) : (
                       <IoIosSave className="text-[0.9rem]" />
                     )}
@@ -290,7 +291,7 @@ export default function ContentArea() {
           </>
         ) : (
           <>
-            <h2 className="font-lexend text-center text-[1.5rem] text-[#333]">
+            <h2 className="text-center font-lexend text-[1.5rem] text-[#333]">
               Task #{taskId} deleted successfully
             </h2>
           </>

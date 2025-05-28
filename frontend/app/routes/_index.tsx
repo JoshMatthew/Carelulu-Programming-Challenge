@@ -4,11 +4,11 @@ import { TaskOperations } from "~/lib/types";
 import { authenticator, sessionStorage } from "~/services/auth.server";
 import { SignInForm } from "~/components/AuthForms/SignInForm";
 import { SignUpForm } from "~/components/AuthForms/SignUpForm";
-import {useSearchParams} from "@remix-run/react";
+import { useSearchParams } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "CareLuLu Programming Challenge | Home" },
+    { title: "CareTask - CareLuLu Programming Challenge" },
     {
       property: "og:title",
       content: "Task creator challenge",
@@ -45,7 +45,7 @@ export const action: ActionFunction = async ({ request }) => {
     }
 
     const session = await sessionStorage.getSession(
-      request.headers.get("cookie")
+      request.headers.get("cookie"),
     );
 
     session.set("user", user);
@@ -66,7 +66,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await sessionStorage.getSession(
-    request.headers.get("cookie")
+    request.headers.get("cookie"),
   );
   const user = session.get("user");
 
@@ -80,8 +80,8 @@ export default function Index() {
   const showSignUp = searchParams.get("signup") === "true";
 
   return (
-    <div className="flex-grow font-lexend flex justify-around items-center bg-[#fefefe] w-full mx-auto">
-      {showSignUp ? (<SignUpForm />) : ((<SignInForm />))}
+    <div className="mx-auto flex w-full flex-grow items-center justify-around bg-[#fefefe] font-lexend">
+      {showSignUp ? <SignUpForm /> : <SignInForm />}
     </div>
   );
 }

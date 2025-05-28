@@ -8,3 +8,18 @@ export enum TaskOperations {
   SIGN_IN = "sign-in",
   SIGN_UP = "sign-up",
 }
+
+export interface User {
+  token: string;
+  username: string;
+  id: string;
+}
+
+export interface Task {
+  id: string;
+  task_title: string;
+  task_description?: string;
+  completed: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

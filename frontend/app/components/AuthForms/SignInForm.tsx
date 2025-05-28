@@ -72,7 +72,7 @@ export const SignInForm = () => {
   };
 
   return (
-    <AuthFormContainer formTitle="Log-in to an existing user">
+    <AuthFormContainer formTitle="Log-in as an existing user">
       <AuthForm
         fetcher={fetcher}
         method="post"

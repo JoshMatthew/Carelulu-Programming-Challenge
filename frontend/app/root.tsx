@@ -12,7 +12,7 @@ import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { ToggleContentProvider } from "./components/ToggleContentContext";
 import { GlobalLoadingBar } from "./components/GlobalLoadingBar";
-import { LoaderFunction, redirect } from "react-router";
+import { LoaderFunction } from "react-router";
 import { sessionStorage } from "~/services/auth.server";
 
 export const links: LinksFunction = () => [

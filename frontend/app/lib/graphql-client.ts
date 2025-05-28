@@ -5,10 +5,14 @@ const apiUrl =
 
 export const gqlClient = new GraphQLClient(apiUrl);
 
-export function createAuthenticatedGqlClient(token: string): GraphQLClient {
+function createAuthenticatedGqlClient(token: string): GraphQLClient {
   return new GraphQLClient(apiUrl, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+}
+
+export function getAuthenticatedGqlClient(token: string): GraphQLClient {
+  return createAuthenticatedGqlClient(token);
 }

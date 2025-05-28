@@ -3,12 +3,7 @@ import { Authenticator } from "remix-auth";
 import { SigninUserMutation, SignupUserMutation } from "~/lib/graphql";
 import { gqlClient } from "~/lib/graphql-client";
 import { FormStrategy } from "remix-auth-form";
-
-type User = {
-  token: string;
-  username: string;
-  id: string;
-};
+import { User } from "~/lib/types";
 
 export const sessionStorage = createCookieSessionStorage({
   cookie: {
