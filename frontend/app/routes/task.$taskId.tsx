@@ -1,4 +1,4 @@
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { useFetcher, useLoaderData, useParams } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import Tag from "~/components/Tag";
@@ -13,6 +13,21 @@ import { MdOutlineDone } from "react-icons/md";
 import { MdDeleteForever } from "react-icons/md";
 import { authenticateUser } from "~/services/auth.server";
 import { CgSpinner } from "react-icons/cg";
+
+export const meta: MetaFunction = ({ data }: any) => {
+  return [
+    { title: `CareLuLu Programming Challenge | Task #${data.task.id || 0}` },
+    {
+      property: "og:title",
+      content: "Task creator challenge",
+    },
+    {
+      name: "description",
+      content:
+        "This is an authorized route that shows details about a specific task.",
+    },
+  ];
+};
 
 export const loader: LoaderFunction = async (args) => {
   const { params, request } = args;
