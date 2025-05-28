@@ -17,7 +17,7 @@ import {
 import { createAuthenticatedGqlClient, gqlClient } from "~/lib/graphql-client";
 
 import { TaskOperations } from "~/lib/types";
-import { authenticateUser } from "~/services/auth.server";
+import { authenticateUser, logoutUser } from "~/services/auth.server";
 
 export const meta: MetaFunction = () => {
   return [

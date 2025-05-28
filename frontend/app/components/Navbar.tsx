@@ -1,4 +1,9 @@
+import { useFetcher } from "@remix-run/react";
+import { TaskOperations } from "~/lib/types";
+
 export function Navbar() {
+  const logoutFetcher = useFetcher();
+
   return (
     <nav className="mb-auto h-[60px] bg-[#4FBBBB]">
       <div className="2xl:max-w-[700px] mx-auto w-full flex justify-center items-center h-full">
@@ -8,10 +13,11 @@ export function Navbar() {
             tasks
           </h1>
         </div>
-        {/* <div>
-          <button>Log in</button>
-          <button>Sign in</button>
-        </div> */}
+        <div>
+          <logoutFetcher.Form method="post" action="/logout" preventScrollReset>
+            <button type="submit">Signout</button>
+          </logoutFetcher.Form>
+        </div>
       </div>
     </nav>
   );

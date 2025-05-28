@@ -83,6 +83,13 @@ export async function authenticateUser(request: Request, returnTo?: string) {
   });
 }
 
+export async function logoutUser(request: Request) {
+  let session = await sessionStorage.getSession(request.headers.get("cookie"));
+  return redirect("/", {
+    headers: { "Set-Cookie": await sessionStorage.destroySession(session) },
+  });
+}
+
 authenticator.use(
   new FormStrategy(async ({ form }) => {
     const username = form.get("email") as string;
