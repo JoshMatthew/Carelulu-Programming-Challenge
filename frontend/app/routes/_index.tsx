@@ -6,12 +6,23 @@ import { TaskOperations } from "~/lib/types";
 import { authenticator, sessionStorage } from "~/services/auth.server";
 
 export const action: ActionFunction = async ({ request }) => {
-  // const formData = await request.formData();
-
-  console.log("JM", request);
+  const clonedRequest = request.clone();
+  const formData = await clonedRequest.formData();
+  const operation = formData.get("operation");
 
   try {
-    let user = await authenticator.authenticate("user-pass", request);
+    let user;
+    switch (operation) {
+      case TaskOperations.SIGN_IN:
+        user = await authenticator.authenticate("signin", request);
+        break;
+      case TaskOperations.SIGN_UP:
+        user = await authenticator.authenticate("signup", request);
+        break;
+      default:
+        throw new Error("Invalid form submission");
+    }
+
     let session = await sessionStorage.getSession(
       request.headers.get("cookie")
     );
@@ -23,24 +34,6 @@ export const action: ActionFunction = async ({ request }) => {
         "Set-Cookie": await sessionStorage.commitSession(session),
       },
     });
-    // switch (operation) {
-    //   case TaskOperations.SIGN_IN:
-    //     let user = await authenticator.authenticate("user-pass", request);
-    //     let session = await sessionStorage.getSession(
-    //       request.headers.get("cookie")
-    //     );
-
-    //     session.set("user", user);
-
-    //     return redirect("/task", {
-    //       headers: {
-    //         "Set-Cookie": await sessionStorage.commitSession(session),
-    //       },
-    //     });
-
-    //   default:
-    //     return redirect("/task");
-    // }
   } catch (error) {
     if (error instanceof Error) {
       return { error: error.message };
@@ -60,14 +53,17 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function Index() {
-  const fetcher = useFetcher();
-  const formRef = useRef<HTMLFormElement>(null);
+  const signInFetcher = useFetcher();
+  const signInFormRef = useRef<HTMLFormElement>(null);
+
+  const signUpFetcher = useFetcher();
+  const signUpFormRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    if (fetcher.state === "idle") {
-      formRef.current?.reset();
+    if (signInFetcher.state === "idle") {
+      signInFormRef.current?.reset();
     }
-  }, [fetcher.state]);
+  }, [signInFetcher.state]);
 
   return (
     <div className="flex-grow font-lexend flex justify-around items-center bg-[#fefefe] 2xl:max-w-[900px] mx-auto">
@@ -76,9 +72,9 @@ export default function Index() {
           Start by creating a new user
         </h1>
 
-        <fetcher.Form
+        <signUpFetcher.Form
           method="post"
-          ref={formRef}
+          ref={signUpFormRef}
           preventScrollReset
           className="@md:rounded-md mx-auto flex items-center overflow-hidden w-full @md:w-auto flex-col gap-2"
         >
@@ -111,7 +107,7 @@ export default function Index() {
           >
             Create and log in
           </button>
-        </fetcher.Form>
+        </signUpFetcher.Form>
       </div>
 
       <span className="text-[2rem]">or</span>
@@ -121,17 +117,17 @@ export default function Index() {
           Log in as an existing user
         </h1>
 
-        <fetcher.Form
+        <signInFetcher.Form
           method="post"
-          ref={formRef}
+          ref={signInFormRef}
           preventScrollReset
           className="@md:rounded-md mx-auto flex items-center overflow-hidden w-full @md:w-auto flex-col gap-2"
         >
-          {/* <input
+          <input
             type="hidden"
             name="operation"
             value={TaskOperations.SIGN_IN}
-          /> */}
+          />
           <input
             name="email"
             type="text"
@@ -152,7 +148,7 @@ export default function Index() {
           >
             Log in
           </button>
-        </fetcher.Form>
+        </signInFetcher.Form>
       </div>
     </div>
   );

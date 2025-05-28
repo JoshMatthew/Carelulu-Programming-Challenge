@@ -120,41 +120,25 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function Tasks() {
-  const { isOn } = useToggle();
-
-  return (
-    <main
-      className={`py-16 mx-auto items-start gap-4 flex relative ${
-        isOn
-          ? "items-start 2xl:max-w-[980px]"
-          : "items-center 2xl:max-w-[1920px]"
-      }`}
-    >
-      <MainArea />
-
-      <div
-        className={`sticky top-6 right-6 transition-all duration-500 ease-in-out ${
-          isOn ? "w-[65vw]" : "w-0"
-        }`}
-      >
-        <Outlet />
-      </div>
-    </main>
-  );
-}
-
-function MainArea() {
   const data: any = useLoaderData();
   const { isOn } = useToggle();
 
   return (
-    <div
-      className={`flex flex-col items-center gap-8 @container transition-all duration-500 ease-in-out ${
-        isOn ? "w-[35vw]" : "w-[100vw]"
-      }`}
+    <main
+      className={`py-16 mx-auto gap-4 flex flex-col items-center justify-center w-full max-w-[1920px] px-8`}
     >
+      {isOn && (
+        <div className="fixed top-0 left-0 bg-[#11111160] w-full h-full z-[9999] flex justify-center items-center fade-in">
+          <div
+            className={`transition-all duration-500 ease-in-out max-w-full mt-auto md:mt-0`}
+          >
+            <Outlet />
+          </div>
+        </div>
+      )}
+
       {data.allTask.length > 0 ? (
-        <div className="flex flex-wrap gap-2 justify-center @md:px-6">
+        <div className={`flex flex-wrap gap-2 justify-center w-auto`}>
           {data.allTask.map((task: any) => (
             <TaskCard
               key={task.id}
@@ -171,6 +155,6 @@ function MainArea() {
         </h2>
       )}
       <NewTaskInputArea />
-    </div>
+    </main>
   );
 }

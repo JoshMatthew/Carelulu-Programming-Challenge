@@ -67,3 +67,15 @@ export const SigninUserMutation = gql`
     }
   }
 `;
+
+export const SignupUserMutation = gql`
+  mutation Signup($data: SignupUserInput!) {
+    signUp(data: $data) {
+      token
+      user {
+        user_name
+        id
+      }
+    }
+  }
+`;

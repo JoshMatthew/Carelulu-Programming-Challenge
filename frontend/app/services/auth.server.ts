@@ -1,6 +1,6 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
 import { Authenticator } from "remix-auth";
-import { SigninUserMutation } from "~/lib/graphql";
+import { SigninUserMutation, SignupUserMutation } from "~/lib/graphql";
 import { gqlClient } from "~/lib/graphql-client";
 import { FormStrategy } from "remix-auth-form";
 
@@ -47,6 +47,30 @@ async function signIn(username: string, password: string): Promise<User> {
   };
 }
 
+async function signUp(username: string, password: string): Promise<User> {
+  const result = await gqlClient.request(SignupUserMutation, {
+    data: {
+      username,
+      password,
+    },
+  });
+
+  if (!result)
+    return {
+      token: "",
+      id: "",
+      username: "",
+    };
+
+  const { signUp }: any = result;
+
+  return {
+    token: signUp.token,
+    id: signUp.user.id,
+    username: signUp.user.user_name,
+  };
+}
+
 export async function authenticateUser(request: Request, returnTo?: string) {
   let session = await sessionStorage.getSession(request.headers.get("cookie"));
   let user = session.get("user");
@@ -71,5 +95,20 @@ authenticator.use(
     return await signIn(username, password);
   }),
 
-  "user-pass"
+  "signin"
+);
+
+authenticator.use(
+  new FormStrategy(async ({ form }) => {
+    const username = form.get("email") as string;
+    const password = form.get("password") as string;
+
+    if (!username || !password) {
+      throw new Error("Username and password are required");
+    }
+
+    return await signUp(username, password);
+  }),
+
+  "signup"
 );
