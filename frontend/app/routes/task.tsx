@@ -19,10 +19,22 @@ import { createAuthenticatedGqlClient, gqlClient } from "~/lib/graphql-client";
 import { TaskOperations } from "~/lib/types";
 import { authenticateUser, logoutUser } from "~/services/auth.server";
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ data }: any) => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    {
+      title: `CareLuLu Programming Challenge | ${
+        data.user.username || "User"
+      }'s Tasks`,
+    },
+    {
+      property: "og:title",
+      content: "Task creator challenge",
+    },
+    {
+      name: "description",
+      content:
+        "This is an authorized route that showcases the tasks for a specific user.",
+    },
   ];
 };
 
@@ -34,6 +46,7 @@ export const loader: LoaderFunction = async (args) => {
   ).request(GetAllTasksQuery);
 
   return {
+    user,
     allTask,
   };
 };

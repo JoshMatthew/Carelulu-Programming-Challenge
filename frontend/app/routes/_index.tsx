@@ -1,9 +1,29 @@
-import { ActionFunction } from "@remix-run/node";
+import { ActionFunction, MetaFunction } from "@remix-run/node";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { LoaderFunction, redirect } from "react-router";
 import { TaskOperations } from "~/lib/types";
 import { authenticator, sessionStorage } from "~/services/auth.server";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "CareLuLu Programming Challenge | Home" },
+    {
+      property: "og:title",
+      content: "Task creator challenge",
+    },
+    {
+      name: "description",
+      content:
+        "This app is for the CareLuLu programming" +
+          " challenge. Backend is mainly created via" +
+          " NodeJS, GraphQL, ExpressJS, and MySQL db via" +
+          " Prisma. Frontend is by using ReactJS's" +
+          " framework" +
+          " RemixJS.",
+    },
+  ];
+};
 
 export const action: ActionFunction = async ({ request }) => {
   const clonedRequest = request.clone();
@@ -23,7 +43,7 @@ export const action: ActionFunction = async ({ request }) => {
         throw new Error("Invalid form submission");
     }
 
-    let session = await sessionStorage.getSession(
+    const session = await sessionStorage.getSession(
       request.headers.get("cookie")
     );
 
@@ -44,8 +64,10 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  let session = await sessionStorage.getSession(request.headers.get("cookie"));
-  let user = session.get("user");
+  const session = await sessionStorage.getSession(
+    request.headers.get("cookie")
+  );
+  const user = session.get("user");
 
   if (user) return redirect("/task");
 
@@ -123,6 +145,9 @@ export default function Index() {
           preventScrollReset
           className="@md:rounded-md mx-auto flex items-center overflow-hidden w-full @md:w-auto flex-col gap-2"
         >
+          <div className="bg-red">
+            <p>Incorrect password</p>
+          </div>
           <input
             type="hidden"
             name="operation"
