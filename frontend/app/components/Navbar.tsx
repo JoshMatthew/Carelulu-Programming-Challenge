@@ -1,4 +1,4 @@
-import { redirect, useFetcher, useLoaderData } from "@remix-run/react";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 
 type LoaderData = {
   user: {
@@ -18,7 +18,7 @@ export function Navbar() {
         <div>
           <h1 className="font-lexend text-2xl font-bold text-white">
             {data && data.user ? (
-              `${data.user.username}'s Tasks`
+              `Tasks for ${data.user.username}`
             ) : (
               <>
                 We will take <span className="text-accent">care</span> of your
