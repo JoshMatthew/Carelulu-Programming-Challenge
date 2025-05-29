@@ -15,7 +15,10 @@ export const context = async ({ req }: any) => {
   if (authHeader?.startsWith('Bearer ')) {
     const token = authHeader.slice(7);
     try {
-      const decoded = jwt.verify(token, env.JWT_SECRET) as JwtPayload;
+      const decoded = jwt.verify(
+        token,
+        (env.JWT_SECRET || 'unsafe-secret') as string,
+      ) as JwtPayload;
       userId = decoded.userId;
     } catch (err) {
       console.log('ERROR: Token is invalid or expired; userId remains null');

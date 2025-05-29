@@ -4,10 +4,12 @@
   "description": "Backend for CareLuLu programming challenge",
   "scripts": {
     "dev": "tsx watch src/app.ts",
+    "test": "mocha -r dotenv/config -r reflect-metadata -r ts-node/register test/**/*.test.ts",
     "start": "tsx src/app.ts",
     "start-server": "npm run build && node ./dist/app.js",
     "build": "tsc",
-    "migrate": "npx prisma migrate dev --name init"
+    "migrate-dev": "npx prisma migrate dev",
+    "migrate-deploy": "npx prisma migrate deploy"
   },
   "author": "Josh Matthew Talplacido",
   "license": "ISC",
@@ -22,20 +24,27 @@
     "class-validator": "^0.14.2",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "graphql": "^16.11.0",
     "graphql-request": "^7.1.2",
     "jsonwebtoken": "^9.0.2",
     "reflect-metadata": "^0.2.2",
     "type-graphql": "^2.0.0-rc.2"
   },
   "devDependencies": {
+    "@types/chai": "^5.2.2",
     "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^22.15.21",
+    "@types/sinon": "^17.0.4",
+    "chai": "^5.2.0",
     "eslint": "^9.27.0",
+    "graphql": "^16.11.0",
+    "mocha": "^11.5.0",
     "nodemon": "^3.1.10",
     "prettier": "^3.5.3",
     "prisma": "^6.8.2",
+    "sinon": "^20.0.0",
+    "supertest": "^7.1.1",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"

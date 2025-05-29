@@ -37,9 +37,10 @@ export class UserResolver {
       },
     });
 
-    const token = jwt.sign({ userId: user.id }, env.JWT_SECRET, {
-      expiresIn: AuthConstants.AUTH_EXPIRATION,
-    });
+    const token = jwt.sign(
+      { exp: AuthConstants.AUTH_EXPIRATION, userId: user.id },
+      (env.JWT_SECRET || 'unsafe-secret') as string,
+    );
 
     return {
       token,
@@ -67,9 +68,10 @@ export class UserResolver {
       throw new Error('Incorrect password');
     }
 
-    const token = jwt.sign({ userId: user.id }, env.JWT_SECRET, {
-      expiresIn: AuthConstants.AUTH_EXPIRATION,
-    });
+    const token = jwt.sign(
+      { exp: AuthConstants.AUTH_EXPIRATION, userId: user.id },
+      (env.JWT_SECRET || 'unsafe-secret') as string,
+    );
 
     return {
       token,
@@ -81,14 +83,5 @@ export class UserResolver {
   async getUsers(@Ctx() ctx: AppContext): Promise<User[]> {
     const { prisma } = ctx;
     return await prisma.user.findMany();
-  }
-
-  // temporary
-  @Mutation(() => String)
-  async deleteAllUsers(@Ctx() ctx: AppContext): Promise<string> {
-    const { prisma } = ctx;
-    const { count } = await prisma.user.deleteMany({});
-
-    return 'Deleted ' + count + ' users';
   }
 }
