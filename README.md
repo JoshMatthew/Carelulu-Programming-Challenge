@@ -1,6 +1,10 @@
 # Full Stack Task Manager - Monorepo Guide
 
-Welcome to the **Full Stack Task Manager** project! This guide will help you set up, run, and develop on this application. Also do note that this is a programming challenge for **CareLuLu**. This is also organized as a monorepo with two main directories: `backend/` and `frontend/`.
+Welcome to the **Full Stack Task Manager** project! This guide will help you set up, run, and develop on this application. Also do note that this is a programming challenge for **CareLuLu**. This is also organized as a monorepo with two main directories: `backend/` and `frontend/`. 
+
+> This guide is aimed for programmers with intermediate to advanced knowledge.
+
+If you're a non-programmer and just wanted to test the app, you can preview it [here](https://carelulu-programming-challenge.vercel.app/)
 
 ---
 
@@ -38,6 +42,8 @@ Optional but helpful tools:
 
 ### 1. Clone the repository
 
+Go to your working directory/folder, open your favorite programming terminal there (but I recommend GitBash for Windows) and paste the code below
+
 ```bash
 git clone https://github.com/JoshMatthew/Carelulu-Programming-Challenge.git
 cd Carelulu-Programming-Challenge
@@ -47,19 +53,33 @@ cd Carelulu-Programming-Challenge
 ## ⚙️ Backend Setup (`/backend`)
 
 ### Install dependencies
-
+In your terminal, paste or type:
 ```bash
 cd backend
 npm install
 ```
 ### Environment Variables
 
-Create a `.env` file inside `backend/` with the following structure:
+Create a `.env` file inside the `backend/` directory with the following content:
 
 ```env
 DATABASE_URL="mysql://<your-db-user>:<your-db-password>@<your-db-host>:<your-db-port>/<your-db-name>"
 JWT_SECRET="<your-secret-token>"
 ```
+
+You can create the `.env` file by:
+
+- Using your code editor (e.g., in **VS Code**, right-click inside the `backend/` folder and choose **"New File"**, then name it `.env`)
+
+**OR**
+
+- Running this command in your terminal from inside the `backend/` folder:
+
+```bash
+touch .env
+```
+
+Then paste the above content into the file and replace the placeholder values with your actual credentials.
 
 ### Common Scripts
 
@@ -73,6 +93,11 @@ JWT_SECRET="<your-secret-token>"
 | `npm run migrate-deploy` | Deploys migrations to production database       |
 | `npm run test`           | Runs backend tests using Mocha                  |
 | `npx prisma studio`      | Opens Prisma Studio GUI for database            |
+
+Run the server in development mode by running this in your terminal:
+```bash
+npm run dev
+```
 
 ### Notes
 
@@ -88,30 +113,38 @@ npm run migrate-dev
 
 ### Install dependencies
 
-Open a **separate terminal**:
+Open a **separate terminal but still inside the `Carelulu-Programming-Challenge/` folder** and paste or type these:
 
 ```bash
 cd frontend
 npm install
 ```
 
-### Start the Remix Client
+### Environment Config
 
+Before running the frontend, we need to configure which backend the frontend connects to, create a `.env` file inside the `frontend/` directory and paste this:
+
+```env
+API_URL=https://your-backend-url.com
+```
+
+If no `API_URL` is provided, it will default to:
+
+```ts
+http://localhost:3000
+```
+
+This means the backend must be running locally on port 3000.
+
+> You can find the logic that handles this connection in `frontend/app/lib/graphql-client.ts`.
+
+### Start the Remix Client
+Start it by pasting or typing this in your terminal inside the `frontend/` directory:
 ```bash
 npm run dev
 ```
 
 This will start the RemixJS app powered by **Vite**.
-
-### Environment Config
-
-To connect the client to your local backend, update `client/app/lib/graphql-client.ts`:
-
-```ts
-const apiUrl = "http://localhost:3000"; // Change this to your desired server URL
-```
-
-> By default, it connects to the deployed EC2 server.
 
 ---
 
