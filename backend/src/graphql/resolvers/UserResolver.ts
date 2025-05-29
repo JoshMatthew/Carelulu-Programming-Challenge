@@ -78,10 +78,4 @@ export class UserResolver {
       user,
     };
   }
-
-  @Query(() => [User])
-  async getUsers(@Ctx() ctx: AppContext): Promise<User[]> {
-    const { prisma } = ctx;
-    return await prisma.user.findMany();
-  }
 }
