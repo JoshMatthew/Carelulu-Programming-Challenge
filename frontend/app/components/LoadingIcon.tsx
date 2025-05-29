@@ -6,10 +6,12 @@ export const LoadingIcon = ({
   fetcher,
   icon,
   className = "",
+  loadingIconClassName = "",
 }: {
   fetcher: FetcherWithComponents<unknown>;
   icon?: ReactNode;
   className?: string;
+  loadingIconClassName?: string;
 }) => {
   return (
     <span
@@ -19,7 +21,7 @@ export const LoadingIcon = ({
       }
     >
       {fetcher.state === "submitting" ? (
-        <CgSpinner className="animate-spin" />
+        <CgSpinner className={`${loadingIconClassName} animate-spin`} />
       ) : (
         icon
       )}

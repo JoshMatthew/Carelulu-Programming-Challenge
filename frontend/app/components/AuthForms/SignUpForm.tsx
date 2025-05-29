@@ -116,7 +116,6 @@ export const SignUpForm = () => {
         fetcher={fetcher}
         submitHandler={handleSubmit}
       >
-        {errors.errorBox && <ErrorBox error={errors.errorBox} />}
         <input type="hidden" name="operation" value={TaskOperations.SIGN_UP} />
 
         <InputField
@@ -150,8 +149,16 @@ export const SignUpForm = () => {
         />
 
         <AuthSubmitBtn>
-          <LoadingIcon icon={<>Create and log-in</>} fetcher={fetcher} />
+          <LoadingIcon
+            loadingIconClassName="text-2xl"
+            icon={<>Create and log-in</>}
+            fetcher={fetcher}
+          />
         </AuthSubmitBtn>
+
+        {errors.errorBox && fetcher.state !== "submitting" && (
+          <ErrorBox error={errors.errorBox} />
+        )}
 
         <p className="mt-4 text-center text-xs text-gray-400">
           Or{" "}

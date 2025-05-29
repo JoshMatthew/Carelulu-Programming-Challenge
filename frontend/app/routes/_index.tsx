@@ -93,8 +93,10 @@ export default function Index() {
   const showSignUp = searchParams.get("signup") === "true";
 
   return (
-    <div className="mx-auto flex w-full flex-grow items-center justify-around bg-[#fefefe] font-lexend">
-      {showSignUp ? <SignUpForm /> : <SignInForm />}
+    <div className="mx-auto flex w-full flex-grow items-start justify-around bg-[#fefefe] font-lexend">
+      <div className="mt-[7rem]">
+        {showSignUp ? <SignUpForm /> : <SignInForm />}
+      </div>
     </div>
   );
 }
