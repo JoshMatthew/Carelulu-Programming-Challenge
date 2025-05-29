@@ -21,7 +21,7 @@ export const AuthForm = ({
       ref={ref}
       preventScrollReset
       onSubmit={submitHandler}
-      className="rounded-md mx-auto flex items-center overflow-hidden w-full flex-col gap-2 px-2"
+      className="mx-auto flex w-full flex-col items-center gap-2 overflow-hidden rounded-md px-2"
     >
       {children}
     </fetcher.Form>
@@ -32,7 +32,7 @@ export const AuthSubmitBtn = ({ children }: { children: ReactNode }) => {
   return (
     <button
       type="submit"
-      className="text-[#ffffff] px-4 py-2 w-full outline-none bg-[#4FBBBB] hover:bg-[#5Fcccc] font-lexend"
+      className="flex w-full justify-center bg-[#4FBBBB] px-4 py-2 font-lexend text-[#ffffff] outline-none hover:bg-[#5Fcccc]"
     >
       {children}
     </button>

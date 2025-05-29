@@ -6,6 +6,7 @@ import { InputField } from "~/components/AuthForms/InputField";
 import { AuthForm, AuthSubmitBtn } from "~/components/AuthForms/AuthForm";
 import { AuthFormContainer } from "~/components/AuthForms/AuthFormContainer";
 import ErrorBox from "./ErrorBox";
+import { LoadingIcon } from "../LoadingIcon";
 
 export const SignUpForm = () => {
   const fetcher = useFetcher();
@@ -148,7 +149,9 @@ export const SignUpForm = () => {
           errorText={errors.repeatedPassword}
         />
 
-        <AuthSubmitBtn>Create and log-in</AuthSubmitBtn>
+        <AuthSubmitBtn>
+          <LoadingIcon icon={<>Create and log-in</>} fetcher={fetcher} />
+        </AuthSubmitBtn>
 
         <p className="mt-4 text-center text-xs text-gray-400">
           Or{" "}

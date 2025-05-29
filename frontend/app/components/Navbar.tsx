@@ -1,4 +1,5 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
+import { LoadingIcon } from "./LoadingIcon";
 
 type LoaderData = {
   user: {
@@ -30,7 +31,7 @@ export function Navbar() {
         {data && data.user && (
           <logoutFetcher.Form method="post" action="/logout" preventScrollReset>
             <button type="submit" className="text-white hover:underline">
-              Sign-out
+              <LoadingIcon icon={<>Sign-out</>} fetcher={logoutFetcher} />
             </button>
           </logoutFetcher.Form>
         )}

@@ -6,6 +6,7 @@ import { InputField } from "~/components/AuthForms/InputField";
 import { AuthFormContainer } from "~/components/AuthForms/AuthFormContainer";
 import { TaskOperations } from "~/lib/types";
 import ErrorBox from "./ErrorBox";
+import { LoadingIcon } from "../LoadingIcon";
 
 export const SignInForm = () => {
   const fetcher = useFetcher();
@@ -111,7 +112,9 @@ export const SignInForm = () => {
           errorText={errors.password}
         />
 
-        <AuthSubmitBtn>Log-in</AuthSubmitBtn>
+        <AuthSubmitBtn>
+          <LoadingIcon icon={<>Log-in</>} fetcher={fetcher} />
+        </AuthSubmitBtn>
 
         <p className="mt-4 text-center text-sm text-gray-400 xl:text-xs">
           Or{" "}
