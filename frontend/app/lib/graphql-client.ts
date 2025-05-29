@@ -1,12 +1,10 @@
 import { GraphQLClient } from "graphql-request";
+import { LOCAL_API } from "./constants";
 
-const apiUrl =
-  "http://ec2-3-27-214-243.ap-southeast-2.compute.amazonaws.com:3000";
-
-export const gqlClient = new GraphQLClient(apiUrl);
+export const gqlClient = new GraphQLClient(process.env.API_URL || LOCAL_API);
 
 function createAuthenticatedGqlClient(token: string): GraphQLClient {
-  return new GraphQLClient(apiUrl, {
+  return new GraphQLClient(process.env.API_URL || LOCAL_API, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

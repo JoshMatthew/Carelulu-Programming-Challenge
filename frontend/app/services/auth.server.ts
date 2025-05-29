@@ -1,9 +1,9 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
 import { Authenticator } from "remix-auth";
 import { SigninUserMutation, SignupUserMutation } from "~/lib/graphql";
-import { gqlClient } from "~/lib/graphql-client";
 import { FormStrategy } from "remix-auth-form";
 import { User } from "~/lib/types";
+import { gqlClient } from "~/lib/graphql-client";
 
 export const sessionStorage = createCookieSessionStorage({
   cookie: {
