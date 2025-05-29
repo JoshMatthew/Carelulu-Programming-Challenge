@@ -10,7 +10,7 @@ Before you begin, make sure you have the following installed:
 
 - [**Node.js**](https://nodejs.org/en/download) >= 20.x
 - **npm** >= 9.x (this will be also installed once you install NodeJs)
-- **MySQL Database** (local or remote, e.g., AWS RDS)
+- **MySQL Database** (local or remote, e.g., AWS RDS. [Here](https://www.prisma.io/dataguide/mysql/setting-up-a-local-mysql-database) is a guide from Prisma on how to run MySQL locally)
 - **Terminal** or command line tool (I recommend [GitBash](https://git-scm.com/downloads) for Windows users)
 - **Git** (for cloning the repository. Git will be installed upon installing GitBash)
 
