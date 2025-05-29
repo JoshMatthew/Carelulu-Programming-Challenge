@@ -7,6 +7,7 @@ import { AuthForm, AuthSubmitBtn } from "~/components/AuthForms/AuthForm";
 import { AuthFormContainer } from "~/components/AuthForms/AuthFormContainer";
 import ErrorBox from "./ErrorBox";
 import { LoadingIcon } from "../LoadingIcon";
+import { APP_ROUTES } from "~/lib/constants";
 
 export const SignUpForm = () => {
   const fetcher = useFetcher();
@@ -162,7 +163,7 @@ export const SignUpForm = () => {
 
         <p className="mt-4 text-center text-xs text-gray-400">
           Or{" "}
-          <Link to="/" className="text-accent">
+          <Link to={APP_ROUTES.HOME} className="text-accent">
             sign-in here
           </Link>{" "}
           if you already have an account

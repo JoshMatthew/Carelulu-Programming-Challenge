@@ -5,6 +5,7 @@ import { Task, TaskOperations } from "~/lib/types";
 import { IoIosSave } from "react-icons/io";
 import { MdDeleteForever } from "react-icons/md";
 import { LoadingIcon } from "../LoadingIcon";
+import { APP_ROUTES } from "~/lib/constants";
 
 const TaskActionButtons: React.FC = () => {
   const { task }: { task: Task } = useLoaderData();
@@ -30,7 +31,11 @@ const TaskActionButtons: React.FC = () => {
 
   return (
     <div className="flex gap-4 font-lexend text-[0.8rem] text-[#5e5e5e]">
-      <taskDeleteFetcher.Form method="post" action="/task" preventScrollReset>
+      <taskDeleteFetcher.Form
+        method="post"
+        action={APP_ROUTES.TASK}
+        preventScrollReset
+      >
         <input
           type="hidden"
           name="operation"
@@ -51,7 +56,11 @@ const TaskActionButtons: React.FC = () => {
       </taskDeleteFetcher.Form>
 
       {shouldUpdate && (
-        <taskUpdateFetcher.Form method="post" action="/task" preventScrollReset>
+        <taskUpdateFetcher.Form
+          method="post"
+          action={APP_ROUTES.TASK}
+          preventScrollReset
+        >
           <input
             type="hidden"
             name="operation"

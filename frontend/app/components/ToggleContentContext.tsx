@@ -6,6 +6,7 @@ import {
   useNavigate,
   useNavigation,
 } from "@remix-run/react";
+import { APP_ROUTES } from "~/lib/constants";
 
 interface ToggleContentType {
   isOn: boolean;
@@ -13,7 +14,7 @@ interface ToggleContentType {
 }
 
 const ToggleContentContext = createContext<ToggleContentType | undefined>(
-  undefined
+  undefined,
 );
 
 export const ToggleContentProvider = ({
@@ -24,7 +25,7 @@ export const ToggleContentProvider = ({
   const navigate = useNavigate();
   const location = useLocation();
   const isOn = /^\/task\/[^/]+$/.test(location.pathname);
-  const close = () => navigate("/task");
+  const close = () => navigate(APP_ROUTES.TASK);
 
   return (
     <ToggleContentContext.Provider value={{ isOn, close }}>

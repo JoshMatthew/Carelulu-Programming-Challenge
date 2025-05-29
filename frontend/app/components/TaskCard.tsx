@@ -4,6 +4,7 @@ import { NavLink } from "@remix-run/react";
 import { ReactNode } from "react";
 import Tag from "./Tag";
 import { useToggle } from "./ToggleContentContext";
+import { APP_ROUTES } from "~/lib/constants";
 
 export default function TaskCard({
   title,
@@ -20,27 +21,26 @@ export default function TaskCard({
 
   return (
     <NavLink
-      to={`/task/${id}#${id}`}
+      to={`${APP_ROUTES.TASK}/${id}`}
       id={id}
       className={({ isActive }) =>
         (isActive
           ? `border-2 border-[#0e4747]`
-          : `hover:bg-[#35bbbb] border-2 border-transparent`) +
-        ` ${completed ? "completed hover:bg-[#858585]" : "hover:bg-[#35bbbb]"} 
-      bg-[#23aaaa] w-full hover:cursor-pointer rounded-md text-white p-4 px-6 flex flex-col items-start transition-all duration-500 ease-in-out md:max-w-[400px] w-full md:w-auto`
+          : `border-2 border-transparent hover:bg-[#35bbbb]`) +
+        ` ${completed ? "completed hover:bg-[#858585]" : "hover:bg-[#35bbbb]"} flex w-full flex-col items-start rounded-md bg-[#23aaaa] p-4 px-6 text-white transition-all duration-500 ease-in-out hover:cursor-pointer md:w-auto md:max-w-[400px]`
       }
     >
-      <div className="flex gap-2 items-start">
+      <div className="flex items-start gap-2">
         <CompleterButton completed={completed} id={id} />
         <h2
           className={`${
             completed ? "completed-main-title" : ""
-          } font-lexend text-[0.89rem] @lg:text-[1rem] @xl:text-[1.4rem] uppercase font-bold`}
+          } font-lexend text-[0.89rem] font-bold uppercase @lg:text-[1rem] @xl:text-[1.4rem]`}
         >
           {title}
         </h2>
       </div>
-      <div className="uppercase flex flex-wrap gap-2 mt-[1rem]">
+      <div className="mt-[1rem] flex flex-wrap gap-2 uppercase">
         <Tag>created {formatDateToCustomString(createdAt, false)}</Tag>
         <Tag>#{id}</Tag>
         <Tag className={`${completed ? "bg-green-500" : "bg-red-500"}`}>

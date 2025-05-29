@@ -4,6 +4,14 @@ import { SigninUserMutation, SignupUserMutation } from "~/lib/graphql";
 import { FormStrategy } from "remix-auth-form";
 import { User } from "~/lib/types";
 import { gqlClient } from "~/lib/graphql-client";
+import {
+  APP_ROUTES,
+  AUTHENTICATOR,
+  FORM_FIELD,
+  HTTP_HEADER,
+  SESSION,
+  SESSION_COOKIE,
+} from "~/lib/constants";
 
 export const sessionStorage = createCookieSessionStorage({
   cookie: {
@@ -107,28 +115,34 @@ function checkAndReturnError(e: unknown) {
 }
 
 export async function authenticateUser(request: Request, returnTo?: string) {
-  let session = await sessionStorage.getSession(request.headers.get("cookie"));
-  let user = session.get("user");
+  let session = await sessionStorage.getSession(
+    request.headers.get(SESSION_COOKIE),
+  );
+  let user = session.get(SESSION.USER);
   if (user) return user;
-  if (returnTo) session.set("returnTo", returnTo);
-  throw redirect("/", {
+  if (returnTo) session.set(SESSION.RETURN_TO, returnTo);
+  throw redirect(APP_ROUTES.HOME, {
     headers: {
-      "Set-Cookie": await sessionStorage.commitSession(session),
+      [HTTP_HEADER.SET_COOKIE]: await sessionStorage.commitSession(session),
     },
   });
 }
 
 export async function logoutUser(request: Request) {
-  let session = await sessionStorage.getSession(request.headers.get("cookie"));
-  return redirect("/", {
-    headers: { "Set-Cookie": await sessionStorage.destroySession(session) },
+  let session = await sessionStorage.getSession(
+    request.headers.get(SESSION_COOKIE),
+  );
+  return redirect(APP_ROUTES.HOME, {
+    headers: {
+      [HTTP_HEADER.SET_COOKIE]: await sessionStorage.destroySession(session),
+    },
   });
 }
 
 authenticator.use(
   new FormStrategy(async ({ form }) => {
-    const username = form.get("email") as string;
-    const password = form.get("password") as string;
+    const username = form.get(FORM_FIELD.USER_NAME) as string;
+    const password = form.get(FORM_FIELD.PASSWORD) as string;
 
     if (!username || !password) {
       throw new Error("Username and password are required");
@@ -137,13 +151,13 @@ authenticator.use(
     return await signIn(username, password);
   }),
 
-  "signin",
+  AUTHENTICATOR.SIGN_IN,
 );
 
 authenticator.use(
   new FormStrategy(async ({ form }) => {
-    const username = form.get("email") as string;
-    const password = form.get("password") as string;
+    const username = form.get(FORM_FIELD.USER_NAME) as string;
+    const password = form.get(FORM_FIELD.PASSWORD) as string;
 
     if (!username || !password) {
       throw new Error("Username and password are required");
@@ -152,5 +166,5 @@ authenticator.use(
     return await signUp(username, password);
   }),
 
-  "signup",
+  AUTHENTICATOR.SIGN_UP,
 );

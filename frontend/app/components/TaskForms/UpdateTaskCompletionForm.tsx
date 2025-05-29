@@ -1,6 +1,7 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { CgSpinner } from "react-icons/cg";
 import { MdOutlineDone } from "react-icons/md";
+import { APP_ROUTES } from "~/lib/constants";
 import { Task, TaskOperations } from "~/lib/types";
 
 export const UpdateTaskCompletionForm = () => {
@@ -10,7 +11,7 @@ export const UpdateTaskCompletionForm = () => {
   return (
     <fetcher.Form
       method="post"
-      action="/task"
+      action={APP_ROUTES.TASK}
       preventScrollReset
       className="lef-4 absolute top-4"
     >

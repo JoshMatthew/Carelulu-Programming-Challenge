@@ -1,15 +1,19 @@
 import { ActionFunction, MetaFunction } from "@remix-run/node";
-import {
-  LoaderFunction,
-  redirect,
-  useActionData,
-  useLoaderData,
-} from "react-router";
-import { TaskOperations, User } from "~/lib/types";
+import { LoaderFunction, redirect } from "react-router";
+import { User } from "~/lib/types";
 import { authenticator, sessionStorage } from "~/services/auth.server";
 import { SignInForm } from "~/components/AuthForms/SignInForm";
 import { SignUpForm } from "~/components/AuthForms/SignUpForm";
 import { useSearchParams } from "@remix-run/react";
+import {
+  APP_ROUTES,
+  AUTHENTICATOR,
+  FORM_FIELD,
+  HTTP_HEADER,
+  SESSION,
+  SESSION_COOKIE,
+  API_OPERATIONS,
+} from "~/lib/constants";
 
 export const meta: MetaFunction = () => {
   return [
@@ -34,23 +38,23 @@ export const meta: MetaFunction = () => {
 export const action: ActionFunction = async ({ request, params }) => {
   const clonedRequest = request.clone();
   const formData = await clonedRequest.formData();
-  const operation = formData.get("operation");
+  const operation = formData.get(FORM_FIELD.OPERATION);
 
   try {
     let user;
     switch (operation) {
-      case TaskOperations.SIGN_IN:
-        user = await authenticator.authenticate("signin", request);
+      case API_OPERATIONS.SIGN_IN:
+        user = await authenticator.authenticate(AUTHENTICATOR.SIGN_IN, request);
         break;
-      case TaskOperations.SIGN_UP:
-        user = await authenticator.authenticate("signup", request);
+      case API_OPERATIONS.SIGN_UP:
+        user = await authenticator.authenticate(AUTHENTICATOR.SIGN_UP, request);
         break;
       default:
         throw new Error("Invalid form submission");
     }
 
     const session = await sessionStorage.getSession(
-      request.headers.get("cookie"),
+      request.headers.get(SESSION_COOKIE),
     );
 
     if (user.error) {
@@ -60,10 +64,10 @@ export const action: ActionFunction = async ({ request, params }) => {
     }
 
     if (user.token) {
-      session.set("user", user);
-      return redirect("/task", {
+      session.set(SESSION.USER, user);
+      return redirect(APP_ROUTES.TASK, {
         headers: {
-          "Set-Cookie": await sessionStorage.commitSession(session),
+          [HTTP_HEADER.SET_COOKIE]: await sessionStorage.commitSession(session),
         },
       });
     }
@@ -78,12 +82,12 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await sessionStorage.getSession(
-    request.headers.get("cookie"),
+    request.headers.get(SESSION_COOKIE),
   );
 
-  const user: User = session.get("user");
+  const user: User = session.get(SESSION.USER);
 
-  if (user) return redirect("/task");
+  if (user) return redirect(APP_ROUTES.TASK);
 
   return null;
 };
