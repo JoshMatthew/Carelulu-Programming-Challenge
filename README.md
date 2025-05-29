@@ -14,7 +14,13 @@ Before you begin, make sure you have the following installed:
 
 - [**Node.js**](https://nodejs.org/en/download) >= 20.x
 - **npm** >= 9.x (this will be also installed once you install NodeJs)
-- **MySQL Database** (local or remote, e.g., AWS RDS. [Here](https://www.prisma.io/dataguide/mysql/setting-up-a-local-mysql-database) is a guide from Prisma on how to run MySQL locally)
+- **MySQL Database** — local or remote:
+  - You can use a managed service like **AWS RDS**
+  - Or run MySQL locally using:
+    - [Prisma’s Guide](https://www.prisma.io/dataguide/mysql/setting-up-a-local-mysql-database)
+    - [XAMPP](https://www.apachefriends.org/index.html) (a free Apache + MySQL + PHP stack)
+    - [MAMP](https://www.mamp.info/en/mac/) (for macOS users)
+    - **Docker** (if you're comfortable with containers)
 - **Terminal** or command line tool (I recommend [GitBash](https://git-scm.com/downloads) for Windows users)
 - **Git** (for cloning the repository. Git will be installed upon installing GitBash)
 
@@ -80,6 +86,16 @@ touch .env
 ```
 
 Then paste the above content into the file and replace the placeholder values with your actual credentials.
+
+### Setup Database
+
+After updating your `.env` file with your own MySQL `DATABASE_URL`, run the following command to apply the database schema:
+
+```bash
+npm run migrate-dev
+```
+
+Your database should now be ready
 
 ### Common Scripts
 
