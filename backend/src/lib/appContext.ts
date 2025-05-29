@@ -1,6 +1,7 @@
 import { PrismaClient } from '../../generated/prisma';
 import jwt from 'jsonwebtoken';
 import { env } from 'process';
+import { UNSAFE_SECRET } from './constants';
 
 const prisma = new PrismaClient();
 
@@ -17,7 +18,7 @@ export const context = async ({ req }: any) => {
     try {
       const decoded = jwt.verify(
         token,
-        (env.JWT_SECRET || 'unsafe-secret') as string,
+        (env.JWT_SECRET || UNSAFE_SECRET) as string,
       ) as JwtPayload;
       userId = decoded.userId;
     } catch (err) {

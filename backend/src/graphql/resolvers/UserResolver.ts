@@ -5,7 +5,7 @@ import {
   SignupUserInput,
   SigninUserInput,
 } from '../models/UserAuth';
-import { AuthConstants } from '../../lib/constants';
+import { AuthConstants, UNSAFE_SECRET } from '../../lib/constants';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { env } from 'process';
@@ -39,7 +39,7 @@ export class UserResolver {
 
     const token = jwt.sign(
       { exp: AuthConstants.AUTH_EXPIRATION, userId: user.id },
-      (env.JWT_SECRET || 'unsafe-secret') as string,
+      (env.JWT_SECRET || UNSAFE_SECRET) as string,
     );
 
     return {
@@ -70,7 +70,7 @@ export class UserResolver {
 
     const token = jwt.sign(
       { exp: AuthConstants.AUTH_EXPIRATION, userId: user.id },
-      (env.JWT_SECRET || 'unsafe-secret') as string,
+      (env.JWT_SECRET || UNSAFE_SECRET) as string,
     );
 
     return {
