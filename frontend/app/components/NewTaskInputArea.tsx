@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { TaskOperations } from "~/lib/types";
 import { MdFormatListBulletedAdd } from "react-icons/md";
 import { CgSpinner } from "react-icons/cg";
+import { LoadingIcon } from "./LoadingIcon";
 
 export default function NewTaskInputArea() {
   const newTaskFetcher = useFetcher();
@@ -16,12 +17,12 @@ export default function NewTaskInputArea() {
   }, [newTaskFetcher.state]);
 
   return (
-    <div className="sticky bottom-0 flex justify-center flex-col items-center p-4 bg-white w-full md:w-auto">
+    <div className="sticky bottom-0 flex w-full flex-col items-center justify-center bg-white p-4 md:w-auto">
       <newTaskFetcher.Form
         method="post"
         ref={formRef}
         preventScrollReset
-        className="@md:rounded-md mx-auto border-2 border-[#4FBBBB] flex justify-center overflow-hidden w-full @md:w-auto"
+        className="mx-auto flex w-full justify-center overflow-hidden border-2 border-[#4FBBBB] @md:w-auto @md:rounded-md"
       >
         <input
           type="hidden"
@@ -31,19 +32,22 @@ export default function NewTaskInputArea() {
         <input
           name="taskTitle"
           type="text"
-          className="bg-[#ffffff] text-black px-4 py-2 w-full outline-none focus:border-none border-none font-lexend"
+          className="w-full border-none bg-[#ffffff] px-4 py-2 font-lexend text-black outline-none focus:border-none"
           placeholder="Add new task"
         />
         <button
           type="submit"
-          className="py-[0.1rem] px-4 hover:bg-[#4FBBBB] bg-white text-[#4FBBBB] hover:text-white"
+          disabled={
+            newTaskFetcher.state === "submitting" ||
+            newTaskFetcher.state === "loading"
+          }
+          className="bg-white px-4 py-[0.1rem] text-[#4FBBBB] hover:bg-[#4FBBBB] hover:text-white"
         >
           <span className="text-[2rem] font-bold">
-            {newTaskFetcher.state === "submitting" ? (
-              <CgSpinner className="animate-spin" />
-            ) : (
-              <MdFormatListBulletedAdd />
-            )}
+            <LoadingIcon
+              fetcher={newTaskFetcher}
+              icon={<MdFormatListBulletedAdd />}
+            />
           </span>
         </button>
       </newTaskFetcher.Form>
@@ -59,12 +63,9 @@ export default function NewTaskInputArea() {
         />
         <button
           type="submit"
-          className="py-2 text-[0.96rem] px-4 mt-4 text-red-700 hover:bg-red-400 bg-red-300 rounded-md flex items-center gap-4"
+          className="mt-4 flex items-center gap-4 rounded-md bg-red-300 px-4 py-2 text-[0.96rem] text-red-700 hover:bg-red-400"
         >
-          Delete all completed task{" "}
-          {deleteTaskFetcher.state === "submitting" && (
-            <CgSpinner className="animate-spin" />
-          )}
+          Delete all completed task <LoadingIcon fetcher={deleteTaskFetcher} />
         </button>
       </deleteTaskFetcher.Form>
     </div>

@@ -1,10 +1,11 @@
-import { useFetcher } from "@remix-run/react";
+import { useActionData, useFetcher, useLoaderData } from "@remix-run/react";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthForm, AuthSubmitBtn } from "~/components/AuthForms/AuthForm";
 import { InputField } from "~/components/AuthForms/InputField";
 import { AuthFormContainer } from "~/components/AuthForms/AuthFormContainer";
 import { TaskOperations } from "~/lib/types";
+import ErrorBox from "./ErrorBox";
 
 export const SignInForm = () => {
   const fetcher = useFetcher();
@@ -15,7 +16,11 @@ export const SignInForm = () => {
     password: "",
   });
 
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState<{
+    email?: string;
+    password?: string;
+    errorBox?: string;
+  }>({
     email: "",
     password: "",
   });
@@ -23,8 +28,12 @@ export const SignInForm = () => {
   useEffect(() => {
     if (fetcher.state === "idle") {
       formRef.current?.reset();
-      setFormData({ email: "", password: "" });
-      setErrors({ email: "", password: "" });
+      if (!fetcher.data) setFormData({ email: "", password: "" });
+      setErrors({
+        email: "",
+        password: "",
+        errorBox: (fetcher.data as any)?.error || "",
+      });
     }
   }, [fetcher.state]);
 
@@ -79,6 +88,7 @@ export const SignInForm = () => {
         ref={formRef}
         submitHandler={handleSubmit}
       >
+        {errors.errorBox && <ErrorBox error={errors.errorBox} />}
         <input type="hidden" name="operation" value={TaskOperations.SIGN_IN} />
 
         <InputField

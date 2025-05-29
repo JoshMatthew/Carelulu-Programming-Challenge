@@ -3,7 +3,7 @@ import { GraphQLClient } from "graphql-request";
 
 export async function deleteTaskHandler(
   formData: FormData,
-  gqlClient: GraphQLClient
+  gqlClient: GraphQLClient,
 ) {
   const id = formData.get("id");
 

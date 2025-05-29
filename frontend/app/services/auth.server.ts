@@ -19,51 +19,91 @@ export const sessionStorage = createCookieSessionStorage({
 export const authenticator = new Authenticator<User>();
 
 async function signIn(username: string, password: string): Promise<User> {
-  const result = await gqlClient.request(SigninUserMutation, {
-    data: {
-      username,
-      password,
-    },
-  });
+  try {
+    const result = await gqlClient.request(SigninUserMutation, {
+      data: {
+        username,
+        password,
+      },
+    });
 
-  if (!result)
+    if (!result)
+      return {
+        token: "",
+        id: "",
+        username: "",
+      };
+
+    const { signIn }: any = result;
+
     return {
-      token: "",
-      id: "",
-      username: "",
+      token: signIn.token,
+      id: signIn.user.id,
+      username: signIn.user.user_name,
     };
-
-  const { signIn }: any = result;
-
-  return {
-    token: signIn.token,
-    id: signIn.user.id,
-    username: signIn.user.user_name,
-  };
+  } catch (e) {
+    return checkAndReturnError(e);
+  }
 }
 
 async function signUp(username: string, password: string): Promise<User> {
-  const result = await gqlClient.request(SignupUserMutation, {
-    data: {
-      username,
-      password,
-    },
-  });
+  try {
+    const result: {
+      signUp: any;
+    } = await gqlClient.request(SignupUserMutation, {
+      data: {
+        username,
+        password,
+      },
+    });
 
-  if (!result)
+    if (!result)
+      return {
+        token: "",
+        id: "",
+        username: "",
+      };
+
+    const {
+      signUp,
+    }: {
+      signUp: {
+        token: string;
+        user: {
+          id: string;
+          user_name: string;
+        };
+      };
+    } = result;
+
+    return {
+      token: signUp.token,
+      id: signUp.user.id,
+      username: signUp.user.user_name,
+    };
+  } catch (e) {
+    return checkAndReturnError(e);
+  }
+}
+
+function checkAndReturnError(e: unknown) {
+  if (e instanceof Error) {
+    const errorMessage = e.message.slice(0, e.message.indexOf(":"));
     return {
       token: "",
       id: "",
       username: "",
+      error: errorMessage,
     };
-
-  const { signUp }: any = result;
-
-  return {
-    token: signUp.token,
-    id: signUp.user.id,
-    username: signUp.user.user_name,
-  };
+  } else {
+    console.error("An unknown error occurred:", e);
+    return {
+      token: "",
+      id: "",
+      username: "",
+      error: JSON.stringify(e),
+    };
+  }
 }
 
 export async function authenticateUser(request: Request, returnTo?: string) {
@@ -97,7 +137,7 @@ authenticator.use(
     return await signIn(username, password);
   }),
 
-  "signin"
+  "signin",
 );
 
 authenticator.use(
@@ -112,5 +152,5 @@ authenticator.use(
     return await signUp(username, password);
   }),
 
-  "signup"
+  "signup",
 );

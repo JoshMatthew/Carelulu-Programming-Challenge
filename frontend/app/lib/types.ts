@@ -13,6 +13,7 @@ export interface User {
   token: string;
   username: string;
   id: string;
+  error?: string;
 }
 
 export interface Task {

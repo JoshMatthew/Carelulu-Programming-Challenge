@@ -1,7 +1,7 @@
-export default function ErrorBox({error}:{ error: string}) {
+export default function ErrorBox({ error }: { error: string }) {
   return (
-    <div className="bg-red-300 w-full">
-      <p className="text-red-700 text-sm p-4">{error}</p>
+    <div className="w-full bg-red-300">
+      <p className="p-4 text-center text-sm text-red-700">{error}</p>
     </div>
   );
 }

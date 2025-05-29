@@ -3,10 +3,8 @@ import type {
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { Outlet } from "@remix-run/react";
 import NewTaskInputArea from "~/components/NewTaskInputArea";
-import TaskCard from "~/components/TaskCard";
-import { useToggle } from "~/components/ToggleContentContext";
 import { GetAllTasksQuery } from "~/lib/graphql";
 import { getAuthenticatedGqlClient } from "~/lib/graphql-client";
 
@@ -20,6 +18,8 @@ import {
   deleteAllCompletedTaskHandler,
 } from "~/lib/task-operations-handlers";
 import { GraphQLClient } from "graphql-request";
+import { TaskList } from "~/components/TaskList";
+import { TaskDetail } from "~/components/TaskDetail";
 
 export const meta: MetaFunction<
   typeof loader,
@@ -90,40 +90,14 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function Tasks() {
-  const data = useLoaderData<{ allTask: Task[] }>();
-  const { isOn } = useToggle();
-
   return (
     <main
-      className={`mx-auto flex w-full max-w-[1920px] flex-col items-center justify-center gap-4 px-8 py-16`}
+      className={`mx-auto flex w-full max-w-[1920px] flex-grow flex-col items-center justify-center gap-4 px-8 py-16`}
     >
-      {isOn && (
-        <div className="fade-in fixed left-0 top-0 z-[9999] flex h-full w-full items-center justify-center bg-[#11111160]">
-          <div
-            className={`mt-auto max-w-full transition-all duration-500 ease-in-out md:mt-0`}
-          >
-            <Outlet />
-          </div>
-        </div>
-      )}
+      <TaskDetail />
 
-      {data.allTask.length > 0 ? (
-        <div className={`flex w-auto flex-wrap justify-center gap-2`}>
-          {data.allTask.map((task: any) => (
-            <TaskCard
-              key={task.id}
-              id={task.id}
-              title={task.task_title}
-              completed={task.completed}
-              createdAt={task.createdAt}
-            />
-          ))}
-        </div>
-      ) : (
-        <h2 className="font-lexend text-[4rem] font-bold text-gray-400">
-          No tasks yet...
-        </h2>
-      )}
+      <TaskList />
+
       <NewTaskInputArea />
     </main>
   );

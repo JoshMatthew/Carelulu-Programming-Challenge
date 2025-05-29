@@ -1,6 +1,11 @@
 import { ActionFunction, MetaFunction } from "@remix-run/node";
-import { LoaderFunction, redirect } from "react-router";
-import { TaskOperations } from "~/lib/types";
+import {
+  LoaderFunction,
+  redirect,
+  useActionData,
+  useLoaderData,
+} from "react-router";
+import { TaskOperations, User } from "~/lib/types";
 import { authenticator, sessionStorage } from "~/services/auth.server";
 import { SignInForm } from "~/components/AuthForms/SignInForm";
 import { SignUpForm } from "~/components/AuthForms/SignUpForm";
@@ -26,7 +31,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request, params }) => {
   const clonedRequest = request.clone();
   const formData = await clonedRequest.formData();
   const operation = formData.get("operation");
@@ -48,13 +53,20 @@ export const action: ActionFunction = async ({ request }) => {
       request.headers.get("cookie"),
     );
 
-    session.set("user", user);
+    if (user.error) {
+      return {
+        error: user.error,
+      };
+    }
 
-    return redirect("/task", {
-      headers: {
-        "Set-Cookie": await sessionStorage.commitSession(session),
-      },
-    });
+    if (user.token) {
+      session.set("user", user);
+      return redirect("/task", {
+        headers: {
+          "Set-Cookie": await sessionStorage.commitSession(session),
+        },
+      });
+    }
   } catch (error) {
     if (error instanceof Error) {
       return { error: error.message };
@@ -68,7 +80,8 @@ export const loader: LoaderFunction = async ({ request }) => {
   const session = await sessionStorage.getSession(
     request.headers.get("cookie"),
   );
-  const user = session.get("user");
+
+  const user: User = session.get("user");
 
   if (user) return redirect("/task");
 

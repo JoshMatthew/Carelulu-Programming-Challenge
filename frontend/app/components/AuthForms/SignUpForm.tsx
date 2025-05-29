@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { InputField } from "~/components/AuthForms/InputField";
 import { AuthForm, AuthSubmitBtn } from "~/components/AuthForms/AuthForm";
 import { AuthFormContainer } from "~/components/AuthForms/AuthFormContainer";
+import ErrorBox from "./ErrorBox";
 
 export const SignUpForm = () => {
   const fetcher = useFetcher();
@@ -16,7 +17,12 @@ export const SignUpForm = () => {
     repeatedPassword: "",
   });
 
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState<{
+    email: string;
+    password: string;
+    repeatedPassword: string;
+    errorBox?: string;
+  }>({
     email: "",
     password: "",
     repeatedPassword: "",
@@ -24,9 +30,16 @@ export const SignUpForm = () => {
 
   useEffect(() => {
     if (fetcher.state === "idle") {
+      console.log(fetcher);
       formRef.current?.reset();
-      setFormData({ email: "", password: "", repeatedPassword: "" });
-      setErrors({ email: "", password: "", repeatedPassword: "" });
+      if (!fetcher.data)
+        setFormData({ email: "", password: "", repeatedPassword: "" });
+      setErrors({
+        email: "",
+        password: "",
+        repeatedPassword: "",
+        errorBox: (fetcher.data as any)?.error || "",
+      });
     }
   }, [fetcher.state]);
 
@@ -102,6 +115,7 @@ export const SignUpForm = () => {
         fetcher={fetcher}
         submitHandler={handleSubmit}
       >
+        {errors.errorBox && <ErrorBox error={errors.errorBox} />}
         <input type="hidden" name="operation" value={TaskOperations.SIGN_UP} />
 
         <InputField
@@ -136,7 +150,7 @@ export const SignUpForm = () => {
 
         <AuthSubmitBtn>Create and log-in</AuthSubmitBtn>
 
-        <p className="mt-4 text-xs text-gray-400 text-center">
+        <p className="mt-4 text-center text-xs text-gray-400">
           Or{" "}
           <Link to="/" className="text-accent">
             sign-in here
