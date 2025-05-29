@@ -20,7 +20,7 @@ export const TaskList = () => {
           ))}
         </div>
       ) : (
-        <h2 className="font-lexend text-[4rem] font-bold text-gray-400">
+        <h2 className="font-lexend text-3xl font-bold text-gray-400 xl:text-6xl">
           No tasks yet...
         </h2>
       )}

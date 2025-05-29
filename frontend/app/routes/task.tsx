@@ -27,9 +27,7 @@ export const meta: MetaFunction<
 > = ({ data }: { data: { user: User } }) => {
   return [
     {
-      title: `Tasks for ${
-        data.user.username || "User"
-      } | CareLuLu Programming Challenge`,
+      title: `${data.user.username || "User"} | CareLuLu Programming Challenge`,
     },
     {
       property: "og:title",

@@ -113,7 +113,7 @@ export const SignInForm = () => {
 
         <AuthSubmitBtn>Log-in</AuthSubmitBtn>
 
-        <p className="mt-4 text-center text-xs text-gray-400">
+        <p className="mt-4 text-center text-sm text-gray-400 xl:text-xs">
           Or{" "}
           <Link to="/?signup=true" className="text-accent">
             sign-up here

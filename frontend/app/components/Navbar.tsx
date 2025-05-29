@@ -16,9 +16,9 @@ export function Navbar() {
         className={`mx-auto flex h-full w-full items-center px-4 2xl:max-w-[700px] ${data && data.user ? "justify-between" : "justify-center"}`}
       >
         <div>
-          <h1 className="font-lexend text-2xl font-bold text-white">
+          <h1 className="font-lexend text-lg font-bold text-white xl:text-2xl">
             {data && data.user ? (
-              `Tasks for ${data.user.username}`
+              `${data.user.username}`
             ) : (
               <>
                 We will take <span className="text-accent">care</span> of your
