@@ -1,8 +1,8 @@
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { CgSpinner } from "react-icons/cg";
 import { MdOutlineDone } from "react-icons/md";
-import { APP_ROUTES } from "~/lib/constants";
-import { Task, TaskOperations } from "~/lib/types";
+import { API_OPERATIONS, APP_ROUTES } from "~/lib/constants";
+import { Task } from "~/lib/types";
 
 export const UpdateTaskCompletionForm = () => {
   const { task }: { task: Task } = useLoaderData();
@@ -18,7 +18,7 @@ export const UpdateTaskCompletionForm = () => {
       <input
         type="hidden"
         name="operation"
-        value={TaskOperations.UPDATE_TASK_COMPLETION}
+        value={API_OPERATIONS.UPDATE_TASK_COMPLETION}
       />
       <input type="hidden" name="completed" value={Number(!task.completed)} />
       <input type="hidden" name="id" value={task.id} />

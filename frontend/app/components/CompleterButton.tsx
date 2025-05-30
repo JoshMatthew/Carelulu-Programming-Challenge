@@ -1,6 +1,6 @@
 import { redirect, useFetcher, useNavigate } from "@remix-run/react";
-import { TaskOperations } from "~/lib/types";
 import { LoadingIcon } from "./LoadingIcon";
+import { API_OPERATIONS } from "~/lib/constants";
 
 export default function CompleterButton({
   completed,
@@ -16,7 +16,7 @@ export default function CompleterButton({
       <input
         type="hidden"
         name="operation"
-        value={TaskOperations.UPDATE_TASK_COMPLETION}
+        value={API_OPERATIONS.UPDATE_TASK_COMPLETION}
       />
       <input type="hidden" name="completed" value={Number(!completed)} />
       <input type="hidden" name="id" value={id} />

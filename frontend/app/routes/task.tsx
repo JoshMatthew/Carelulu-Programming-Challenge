@@ -8,7 +8,7 @@ import NewTaskInputArea from "~/components/NewTaskInputArea";
 import { GetAllTasksQuery } from "~/lib/graphql";
 import { getAuthenticatedGqlClient } from "~/lib/graphql-client";
 
-import { Task, TaskOperations, User } from "~/lib/types";
+import { Task, User } from "~/lib/types";
 import { authenticateUser } from "~/services/auth.server";
 import {
   completeTaskHandler,
@@ -20,6 +20,7 @@ import {
 import { GraphQLClient } from "graphql-request";
 import { TaskList } from "~/components/TaskList";
 import { TaskDetail } from "~/components/TaskDetail";
+import { API_OPERATIONS } from "~/lib/constants";
 
 export const meta: MetaFunction<
   typeof loader,
@@ -67,11 +68,11 @@ export const action: ActionFunction = async ({ request }) => {
     string,
     (formData: FormData, gqlClient: GraphQLClient) => Promise<Response>
   > = {
-    [TaskOperations.CREATE_TASK]: createTaskHandler,
-    [TaskOperations.UPDATE_TASK_COMPLETION]: completeTaskHandler,
-    [TaskOperations.UPDATE_TASK]: updateTaskHandler,
-    [TaskOperations.DELETE_TASK]: deleteTaskHandler,
-    [TaskOperations.DELETE_ALL_COMPLETED]: deleteAllCompletedTaskHandler,
+    [API_OPERATIONS.CREATE_TASK]: createTaskHandler,
+    [API_OPERATIONS.UPDATE_TASK_COMPLETION]: completeTaskHandler,
+    [API_OPERATIONS.UPDATE_TASK]: updateTaskHandler,
+    [API_OPERATIONS.DELETE_TASK]: deleteTaskHandler,
+    [API_OPERATIONS.DELETE_ALL_COMPLETED]: deleteAllCompletedTaskHandler,
   };
 
   const handler = handlers[operation as string];

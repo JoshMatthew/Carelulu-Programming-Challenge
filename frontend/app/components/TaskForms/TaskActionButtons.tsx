@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useTaskEditContext } from "./TaskEditContext";
-import { Task, TaskOperations } from "~/lib/types";
+import { Task } from "~/lib/types";
 import { IoIosSave } from "react-icons/io";
 import { MdDeleteForever } from "react-icons/md";
 import { LoadingIcon } from "../LoadingIcon";
-import { APP_ROUTES } from "~/lib/constants";
+import { API_OPERATIONS, APP_ROUTES } from "~/lib/constants";
 
 const TaskActionButtons: React.FC = () => {
   const { task }: { task: Task } = useLoaderData();
@@ -39,7 +39,7 @@ const TaskActionButtons: React.FC = () => {
         <input
           type="hidden"
           name="operation"
-          value={TaskOperations.DELETE_TASK}
+          value={API_OPERATIONS.DELETE_TASK}
         />
         <input type="hidden" name="id" value={task.id} />
         <button
@@ -64,7 +64,7 @@ const TaskActionButtons: React.FC = () => {
           <input
             type="hidden"
             name="operation"
-            value={TaskOperations.UPDATE_TASK}
+            value={API_OPERATIONS.UPDATE_TASK}
           />
           <input type="hidden" name="id" value={task.id} />
           <input type="hidden" name="taskTitle" value={titleValue} />

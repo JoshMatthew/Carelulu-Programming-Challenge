@@ -1,9 +1,8 @@
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useRef } from "react";
-import { TaskOperations } from "~/lib/types";
 import { MdFormatListBulletedAdd } from "react-icons/md";
-import { CgSpinner } from "react-icons/cg";
 import { LoadingIcon } from "./LoadingIcon";
+import { API_OPERATIONS } from "~/lib/constants";
 
 export default function NewTaskInputArea() {
   const newTaskFetcher = useFetcher();
@@ -27,7 +26,7 @@ export default function NewTaskInputArea() {
         <input
           type="hidden"
           name="operation"
-          value={TaskOperations.CREATE_TASK}
+          value={API_OPERATIONS.CREATE_TASK}
         />
         <input
           name="taskTitle"
@@ -59,7 +58,7 @@ export default function NewTaskInputArea() {
         <input
           type="hidden"
           name="operation"
-          value={TaskOperations.DELETE_ALL_COMPLETED}
+          value={API_OPERATIONS.DELETE_ALL_COMPLETED}
         />
         <button
           type="submit"
