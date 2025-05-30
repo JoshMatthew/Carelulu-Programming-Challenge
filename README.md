@@ -144,10 +144,10 @@ Before running the frontend, we need to configure which backend the frontend con
 API_URL=https://your-backend-url.com
 ```
 
-If no `API_URL` is provided, it will default to:
+If no `API_URL` or `.env` is provided, it will default to:
 
 ```ts
-http://localhost:3000
+http://127.0.0.1:3000
 ```
 
 This means the backend must be running locally on port 3000.
