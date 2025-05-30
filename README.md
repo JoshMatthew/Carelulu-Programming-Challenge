@@ -138,13 +138,18 @@ npm install
 
 ### Environment Config
 
-Before running the frontend, we need to configure which backend the frontend connects to, create a `.env` file inside the `frontend/` directory and paste this:
+
+Before running the frontend, we need to configure which backend it connects to.  
+Create a `.env` file inside the `frontend/` directory and paste the following:
 
 ```env
-API_URL=https://your-backend-url.com
+API_URL=http://127.0.0.1:3000
 ```
 
-If no `API_URL` or `.env` is provided, it will default to:
+> ⚠️ **Important:** If you are connecting to a local backend, use `http://127.0.0.1:3000` instead of `http://localhost:3000`.  
+> Using `localhost` in `API_URL` may cause issues with Remix due to how it handles environment variables in different environments.
+
+If no `.env` or `API_URL` is provided, it will **default to**:
 
 ```ts
 http://127.0.0.1:3000
@@ -152,7 +157,11 @@ http://127.0.0.1:3000
 
 This means the backend must be running locally on port 3000.
 
-> You can find the logic that handles this connection in `frontend/app/lib/graphql-client.ts`.
+You can find the logic that handles this connection in:
+
+```ts
+frontend/app/lib/graphql-client.ts
+```
 
 ### Start the Remix Client
 Start it by pasting or typing this in your terminal inside the `frontend/` directory:
