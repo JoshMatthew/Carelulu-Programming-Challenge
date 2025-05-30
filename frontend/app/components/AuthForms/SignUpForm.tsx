@@ -1,17 +1,94 @@
-import { TaskOperations } from "~/lib/types";
 import { useFetcher } from "@remix-run/react";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { InputField } from "~/components/AuthForms/InputField";
-import { AuthForm, AuthSubmitBtn } from "~/components/AuthForms/AuthForm";
+import { AuthForm, AuthFormSubmitBtn } from "~/components/AuthForms/AuthForm";
 import { AuthFormContainer } from "~/components/AuthForms/AuthFormContainer";
 import ErrorBox from "./ErrorBox";
 import { LoadingIcon } from "../LoadingIcon";
-import { APP_ROUTES } from "~/lib/constants";
+import {
+  API_OPERATIONS,
+  APP_ROUTES,
+  FETCHER_STATE,
+  FORM_FIELD,
+  FORM_METHOD,
+} from "~/lib/constants";
 
 export const SignUpForm = () => {
+  const Component = () => (
+    <AuthFormContainer formTitle="Start by creating a new user">
+      <AuthForm
+        method={FORM_METHOD.POST}
+        ref={formRef}
+        fetcher={fetcher}
+        submitHandler={handleSubmit}
+      >
+        <input
+          type="hidden"
+          name={FORM_FIELD.OPERATION}
+          value={API_OPERATIONS.SIGN_UP}
+        />
+
+        <InputField
+          name={FormFields.username}
+          type="text"
+          value={formData.email}
+          changeHandler={handleChange}
+          placeholder="Username"
+          errors={!!errors.email}
+          errorText={errors.email}
+        />
+
+        <InputField
+          name={FormFields.password}
+          type="password"
+          value={formData.password}
+          changeHandler={handleChange}
+          placeholder="Password"
+          errors={!!errors.password}
+          errorText={errors.password}
+        />
+
+        <InputField
+          name={FormFields.repeatedPassword}
+          type="password"
+          value={formData.repeatedPassword}
+          changeHandler={handleChange}
+          placeholder="Repeat password"
+          errors={!!errors.repeatedPassword}
+          errorText={errors.repeatedPassword}
+        />
+
+        <AuthFormSubmitBtn>
+          <LoadingIcon
+            loadingIconClassName="text-2xl"
+            icon={<>Create and log-in</>}
+            fetcher={fetcher}
+          />
+        </AuthFormSubmitBtn>
+
+        {errors.errorBox && fetcher.state !== FETCHER_STATE.SUBMITTING && (
+          <ErrorBox error={errors.errorBox} />
+        )}
+
+        <p className="mt-4 text-center text-xs text-gray-400">
+          Or{" "}
+          <Link to={APP_ROUTES.HOME} className="text-accent">
+            sign-in here
+          </Link>{" "}
+          if you already have an account
+        </p>
+      </AuthForm>
+    </AuthFormContainer>
+  );
+
   const fetcher = useFetcher();
   const formRef = useRef<HTMLFormElement>(null);
+  enum FormFields {
+    username = FORM_FIELD.USER_NAME,
+    password = FORM_FIELD.PASSWORD,
+    repeatedPassword = "repeatedPassword",
+  }
 
   const [formData, setFormData] = useState({
     email: "",
@@ -31,7 +108,7 @@ export const SignUpForm = () => {
   });
 
   useEffect(() => {
-    if (fetcher.state === "idle") {
+    if (fetcher.state === FETCHER_STATE.IDLE) {
       console.log(fetcher);
       formRef.current?.reset();
       if (!fetcher.data)
@@ -45,21 +122,21 @@ export const SignUpForm = () => {
     }
   }, [fetcher.state]);
 
-  const validateField = (name: string, value: string) => {
+  const validateField = (name: FormFields, value: string) => {
     let error = "";
 
     switch (name) {
-      case "email":
+      case FormFields.username:
         if (value.trim().length <= 3) {
           error = "Username must be at least 4" + " characters long.";
         }
         break;
-      case "password":
+      case FormFields.password:
         if (value.length < 6) {
           error = "Password must be at least 6 characters long.";
         }
         break;
-      case "repeatedPassword":
+      case FormFields.repeatedPassword:
         if (value !== formData.password) {
           error = "Passwords do not match.";
         }
@@ -75,7 +152,7 @@ export const SignUpForm = () => {
     const { name, value } = e.target;
 
     setFormData((prevData) => ({ ...prevData, [name]: value }));
-    validateField(name, value);
+    validateField(name as FormFields, value);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -109,66 +186,5 @@ export const SignUpForm = () => {
     fetcher.submit(e.currentTarget);
   };
 
-  return (
-    <AuthFormContainer formTitle="Start by creating a new user">
-      <AuthForm
-        method="post"
-        ref={formRef}
-        fetcher={fetcher}
-        submitHandler={handleSubmit}
-      >
-        <input type="hidden" name="operation" value={TaskOperations.SIGN_UP} />
-
-        <InputField
-          name="email"
-          type="text"
-          value={formData.email}
-          changeHandler={handleChange}
-          placeholder="Username"
-          errors={!!errors.email}
-          errorText={errors.email}
-        />
-
-        <InputField
-          name="password"
-          type="password"
-          value={formData.password}
-          changeHandler={handleChange}
-          placeholder="Password"
-          errors={!!errors.password}
-          errorText={errors.password}
-        />
-
-        <InputField
-          name="repeatedPassword"
-          type="password"
-          value={formData.repeatedPassword}
-          changeHandler={handleChange}
-          placeholder="Repeat password"
-          errors={!!errors.repeatedPassword}
-          errorText={errors.repeatedPassword}
-        />
-
-        <AuthSubmitBtn>
-          <LoadingIcon
-            loadingIconClassName="text-2xl"
-            icon={<>Create and log-in</>}
-            fetcher={fetcher}
-          />
-        </AuthSubmitBtn>
-
-        {errors.errorBox && fetcher.state !== "submitting" && (
-          <ErrorBox error={errors.errorBox} />
-        )}
-
-        <p className="mt-4 text-center text-xs text-gray-400">
-          Or{" "}
-          <Link to={APP_ROUTES.HOME} className="text-accent">
-            sign-in here
-          </Link>{" "}
-          if you already have an account
-        </p>
-      </AuthForm>
-    </AuthFormContainer>
-  );
+  return <Component />;
 };

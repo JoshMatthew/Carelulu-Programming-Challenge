@@ -15,25 +15,18 @@ import {
   API_OPERATIONS,
 } from "~/lib/constants";
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "CareTask - CareLuLu Programming Challenge" },
-    {
-      property: "og:title",
-      content: "Task creator challenge",
-    },
-    {
-      name: "description",
-      content:
-        "This app is for the CareLuLu programming" +
-        " challenge. Backend is mainly created via" +
-        " NodeJS, GraphQL, ExpressJS, and MySQL db via" +
-        " Prisma. Frontend is by using ReactJS's" +
-        " framework" +
-        " RemixJS.",
-    },
-  ];
-};
+export default function Index() {
+  const [searchParams] = useSearchParams();
+  const showSignUp = searchParams.get("signup") === "true";
+
+  return (
+    <div className="mx-auto flex w-full flex-grow justify-center bg-[#fefefe] font-lexend md:items-start">
+      <div className="mt-[7rem] w-full">
+        {showSignUp ? <SignUpForm /> : <SignInForm />}
+      </div>
+    </div>
+  );
+}
 
 export const action: ActionFunction = async ({ request, params }) => {
   const clonedRequest = request.clone();
@@ -92,15 +85,22 @@ export const loader: LoaderFunction = async ({ request }) => {
   return null;
 };
 
-export default function Index() {
-  const [searchParams] = useSearchParams();
-  const showSignUp = searchParams.get("signup") === "true";
-
-  return (
-    <div className="mx-auto flex w-full flex-grow justify-center bg-[#fefefe] font-lexend md:items-start">
-      <div className="mt-[7rem] w-full">
-        {showSignUp ? <SignUpForm /> : <SignInForm />}
-      </div>
-    </div>
-  );
-}
+export const meta: MetaFunction = () => {
+  return [
+    { title: "CareTask - CareLuLu Programming Challenge" },
+    {
+      property: "og:title",
+      content: "Task creator challenge",
+    },
+    {
+      name: "description",
+      content:
+        "This app is for the CareLuLu programming" +
+        " challenge. Backend is mainly created via" +
+        " NodeJS, GraphQL, ExpressJS, and MySQL db via" +
+        " Prisma. Frontend is by using ReactJS's" +
+        " framework" +
+        " RemixJS.",
+    },
+  ];
+};

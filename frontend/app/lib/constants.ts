@@ -37,4 +37,15 @@ export enum HTTP_HEADER {
   SET_COOKIE = "Set-Cookie",
 }
 
+export enum FETCHER_STATE {
+  IDLE = "idle",
+  LOADING = "loading",
+  SUBMITTING = "submitting",
+}
+
+export enum FORM_METHOD {
+  POST = "post",
+  GET = "get",
+}
+
 export const SESSION_COOKIE = "cookie";

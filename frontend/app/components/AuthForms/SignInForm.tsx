@@ -1,14 +1,77 @@
-import { useActionData, useFetcher, useLoaderData } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { AuthForm, AuthSubmitBtn } from "~/components/AuthForms/AuthForm";
+import { AuthForm, AuthFormSubmitBtn } from "~/components/AuthForms/AuthForm";
 import { InputField } from "~/components/AuthForms/InputField";
 import { AuthFormContainer } from "~/components/AuthForms/AuthFormContainer";
-import { TaskOperations } from "~/lib/types";
 import ErrorBox from "./ErrorBox";
 import { LoadingIcon } from "../LoadingIcon";
+import {
+  API_OPERATIONS,
+  APP_ROUTES,
+  FETCHER_STATE,
+  FORM_FIELD,
+  FORM_METHOD,
+} from "~/lib/constants";
 
 export const SignInForm = () => {
+  const Component = () => (
+    <AuthFormContainer formTitle="Log-in as an existing user">
+      <AuthForm
+        fetcher={fetcher}
+        method={FORM_METHOD.POST}
+        ref={formRef}
+        submitHandler={handleSubmit}
+      >
+        <input
+          type="hidden"
+          name={FORM_FIELD.OPERATION}
+          value={API_OPERATIONS.SIGN_IN}
+        />
+
+        <InputField
+          name={FORM_FIELD.USER_NAME}
+          type="text"
+          value={formData.email}
+          changeHandler={handleChange}
+          placeholder="Username"
+          errors={!!errors.email}
+          errorText={errors.email}
+        />
+
+        <InputField
+          name={FORM_FIELD.PASSWORD}
+          type="password"
+          value={formData.password}
+          changeHandler={handleChange}
+          placeholder="Password"
+          errors={!!errors.password}
+          errorText={errors.password}
+        />
+
+        <AuthFormSubmitBtn>
+          <LoadingIcon
+            loadingIconClassName="text-2xl"
+            icon={<>Log-in</>}
+            fetcher={fetcher}
+          />
+        </AuthFormSubmitBtn>
+
+        {errors.errorBox && fetcher.state !== FETCHER_STATE.SUBMITTING && (
+          <ErrorBox error={errors.errorBox} />
+        )}
+
+        <p className="mt-4 text-center text-sm text-gray-400 xl:text-xs">
+          Or{" "}
+          <Link to={`${APP_ROUTES.HOME}?signup=true`} className="text-accent">
+            sign-up here
+          </Link>{" "}
+          if you don&#39;t have one yet
+        </p>
+      </AuthForm>
+    </AuthFormContainer>
+  );
+
   const fetcher = useFetcher();
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -27,7 +90,7 @@ export const SignInForm = () => {
   });
 
   useEffect(() => {
-    if (fetcher.state === "idle") {
+    if (fetcher.state === FETCHER_STATE.IDLE) {
       formRef.current?.reset();
       if (!fetcher.data) setFormData({ email: "", password: "" });
       setErrors({
@@ -81,56 +144,5 @@ export const SignInForm = () => {
     fetcher.submit(e.currentTarget);
   };
 
-  return (
-    <AuthFormContainer formTitle="Log-in as an existing user">
-      <AuthForm
-        fetcher={fetcher}
-        method="post"
-        ref={formRef}
-        submitHandler={handleSubmit}
-      >
-        <input type="hidden" name="operation" value={TaskOperations.SIGN_IN} />
-
-        <InputField
-          name="email"
-          type="text"
-          value={formData.email}
-          changeHandler={handleChange}
-          placeholder="Username"
-          errors={!!errors.email}
-          errorText={errors.email}
-        />
-
-        <InputField
-          name="password"
-          type="password"
-          value={formData.password}
-          changeHandler={handleChange}
-          placeholder="Password"
-          errors={!!errors.password}
-          errorText={errors.password}
-        />
-
-        <AuthSubmitBtn>
-          <LoadingIcon
-            loadingIconClassName="text-2xl"
-            icon={<>Log-in</>}
-            fetcher={fetcher}
-          />
-        </AuthSubmitBtn>
-
-        {errors.errorBox && fetcher.state !== "submitting" && (
-          <ErrorBox error={errors.errorBox} />
-        )}
-
-        <p className="mt-4 text-center text-sm text-gray-400 xl:text-xs">
-          Or{" "}
-          <Link to="/?signup=true" className="text-accent">
-            sign-up here
-          </Link>{" "}
-          if you don&#39;t have one yet
-        </p>
-      </AuthForm>
-    </AuthFormContainer>
-  );
+  return <Component />;
 };

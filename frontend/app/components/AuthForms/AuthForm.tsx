@@ -28,7 +28,7 @@ export const AuthForm = ({
   );
 };
 
-export const AuthSubmitBtn = ({ children }: { children: ReactNode }) => {
+export const AuthFormSubmitBtn = ({ children }: { children: ReactNode }) => {
   return (
     <button
       type="submit"
