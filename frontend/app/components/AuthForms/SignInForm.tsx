@@ -15,63 +15,6 @@ import {
 } from "~/lib/constants";
 
 export const SignInForm = () => {
-  const Component = () => (
-    <AuthFormContainer formTitle="Log-in as an existing user">
-      <AuthForm
-        fetcher={fetcher}
-        method={FORM_METHOD.POST}
-        ref={formRef}
-        submitHandler={handleSubmit}
-      >
-        <input
-          type="hidden"
-          name={FORM_FIELD.OPERATION}
-          value={API_OPERATIONS.SIGN_IN}
-        />
-
-        <InputField
-          name={FORM_FIELD.USER_NAME}
-          type="text"
-          value={formData.email}
-          changeHandler={handleChange}
-          placeholder="Username"
-          errors={!!errors.email}
-          errorText={errors.email}
-        />
-
-        <InputField
-          name={FORM_FIELD.PASSWORD}
-          type="password"
-          value={formData.password}
-          changeHandler={handleChange}
-          placeholder="Password"
-          errors={!!errors.password}
-          errorText={errors.password}
-        />
-
-        <AuthFormSubmitBtn>
-          <LoadingIcon
-            loadingIconClassName="text-2xl"
-            icon={<>Log-in</>}
-            fetcher={fetcher}
-          />
-        </AuthFormSubmitBtn>
-
-        {errors.errorBox && fetcher.state !== FETCHER_STATE.SUBMITTING && (
-          <ErrorBox error={errors.errorBox} />
-        )}
-
-        <p className="mt-4 text-center text-sm text-gray-400 xl:text-xs">
-          Or{" "}
-          <Link to={`${APP_ROUTES.HOME}?signup=true`} className="text-accent">
-            sign-up here
-          </Link>{" "}
-          if you don&#39;t have one yet
-        </p>
-      </AuthForm>
-    </AuthFormContainer>
-  );
-
   const fetcher = useFetcher();
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -144,5 +87,60 @@ export const SignInForm = () => {
     fetcher.submit(e.currentTarget);
   };
 
-  return <Component />;
+  return (
+    <AuthFormContainer formTitle="Log-in as an existing user">
+      <AuthForm
+        fetcher={fetcher}
+        method={FORM_METHOD.POST}
+        formRef={formRef}
+        submitHandler={handleSubmit}
+      >
+        <input
+          type="hidden"
+          name={FORM_FIELD.OPERATION}
+          value={API_OPERATIONS.SIGN_IN}
+        />
+
+        <InputField
+          name={FORM_FIELD.USER_NAME}
+          type="text"
+          value={formData.email}
+          changeHandler={handleChange}
+          placeholder="Username"
+          errors={!!errors.email}
+          errorText={errors.email}
+        />
+
+        <InputField
+          name={FORM_FIELD.PASSWORD}
+          type="password"
+          value={formData.password}
+          changeHandler={handleChange}
+          placeholder="Password"
+          errors={!!errors.password}
+          errorText={errors.password}
+        />
+
+        <AuthFormSubmitBtn>
+          <LoadingIcon
+            loadingIconClassName="text-2xl"
+            icon={<>Log-in</>}
+            fetcher={fetcher}
+          />
+        </AuthFormSubmitBtn>
+
+        {errors.errorBox && fetcher.state !== FETCHER_STATE.SUBMITTING && (
+          <ErrorBox error={errors.errorBox} />
+        )}
+
+        <p className="mt-4 text-center text-sm text-gray-400 xl:text-xs">
+          Or{" "}
+          <Link to={`${APP_ROUTES.HOME}?signup=true`} className="text-accent">
+            sign-up here
+          </Link>{" "}
+          if you don&#39;t have one yet
+        </p>
+      </AuthForm>
+    </AuthFormContainer>
+  );
 };

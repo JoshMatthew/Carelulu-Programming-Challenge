@@ -4,13 +4,13 @@ import { FetcherWithComponents } from "@remix-run/react";
 
 export const AuthForm = ({
   method,
-  ref,
+  formRef,
   submitHandler,
   children,
   fetcher,
 }: {
   method: HTMLFormMethod;
-  ref: React.LegacyRef<HTMLFormElement>;
+  formRef: any;
   submitHandler: React.FormEventHandler<HTMLFormElement>;
   children: ReactNode;
   fetcher: FetcherWithComponents<unknown>;
@@ -18,7 +18,7 @@ export const AuthForm = ({
   return (
     <fetcher.Form
       method={method}
-      ref={ref}
+      itemRef={formRef}
       preventScrollReset
       onSubmit={submitHandler}
       className="mx-auto flex w-full flex-col items-center gap-2 overflow-hidden rounded-md px-2"
