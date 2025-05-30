@@ -10,7 +10,7 @@ import {
   API_OPERATIONS,
   APP_ROUTES,
   FETCHER_STATE,
-  FORM_FIELD,
+  FORM_NAME,
   FORM_METHOD,
 } from "~/lib/constants";
 
@@ -18,8 +18,8 @@ export const SignUpForm = () => {
   const fetcher = useFetcher();
   const formRef = useRef<HTMLFormElement>(null);
   enum FormField {
-    username = FORM_FIELD.USER_NAME,
-    password = FORM_FIELD.PASSWORD,
+    username = FORM_NAME.USER_NAME,
+    password = FORM_NAME.PASSWORD,
     repeatedPassword = "repeatedPassword",
   }
 
@@ -129,7 +129,7 @@ export const SignUpForm = () => {
       >
         <input
           type="hidden"
-          name={FORM_FIELD.OPERATION}
+          name={FORM_NAME.OPERATION}
           value={API_OPERATIONS.SIGN_UP}
         />
 

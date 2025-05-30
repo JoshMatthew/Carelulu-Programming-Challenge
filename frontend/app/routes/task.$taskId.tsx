@@ -13,40 +13,6 @@ import TaskDescriptionInput from "~/components/TaskForms/TaskDescriptionInput";
 import TaskActionButtons from "~/components/TaskForms/TaskActionButtons";
 import { TaskTags } from "~/components/TaskTags";
 
-export const meta: MetaFunction = ({ data }: any) => {
-  return [
-    { title: `Task #${data.task?.id || 0} | CareLuLu Programming Challenge` },
-    {
-      property: "og:title",
-      content: "Task creator challenge",
-    },
-    {
-      name: "description",
-      content:
-        "This is an authorized route that shows details about a specific task.",
-    },
-  ];
-};
-
-export const loader: LoaderFunction = async (args) => {
-  const { params, request } = args;
-  let user: User = await authenticateUser(request);
-  let _task = null;
-
-  try {
-    _task = await getTaskHandler(
-      params.taskId || "-1",
-      await getAuthenticatedGqlClient(user.token),
-    );
-  } catch (e) {
-    console.log(`Error fetching task: ${params.taskId}: ` + e);
-  }
-
-  return {
-    task: _task,
-  };
-};
-
 export default function ContentArea() {
   const { task }: any = useLoaderData();
   const { taskId }: any = useParams();
@@ -80,3 +46,37 @@ export default function ContentArea() {
     </TaskEditProvider>
   );
 }
+
+export const loader: LoaderFunction = async (args) => {
+  const { params, request } = args;
+  let user: User = await authenticateUser(request);
+  let _task = null;
+
+  try {
+    _task = await getTaskHandler(
+      params.taskId || "-1",
+      await getAuthenticatedGqlClient(user.token),
+    );
+  } catch (e) {
+    console.log(`Task: ${params.taskId} deleted or unknown`);
+  }
+
+  return {
+    task: _task,
+  };
+};
+
+export const meta: MetaFunction = ({ data }: any) => {
+  return [
+    { title: `Task #${data.task?.id || 0} | CareLuLu Programming Challenge` },
+    {
+      property: "og:title",
+      content: "Task creator challenge",
+    },
+    {
+      name: "description",
+      content:
+        "This is an authorized route that shows details about a specific task.",
+    },
+  ];
+};

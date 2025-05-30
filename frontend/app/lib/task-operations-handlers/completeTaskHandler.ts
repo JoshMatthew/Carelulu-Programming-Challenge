@@ -1,12 +1,13 @@
 import { UpdateTaskMutation } from "~/lib/graphql";
 import { GraphQLClient } from "graphql-request";
+import { FORM_NAME } from "../constants";
 
 export async function completeTaskHandler(
   formData: FormData,
-  gqlClient: GraphQLClient
+  gqlClient: GraphQLClient,
 ) {
-  const completed = Boolean(Number(formData.get("completed")));
-  const id = formData.get("id");
+  const completed = Boolean(Number(formData.get(FORM_NAME.COMPLETED)));
+  const id = formData.get(FORM_NAME.ID);
 
   if (typeof id !== "string") {
     return new Response("Invalid input", { status: 400 });

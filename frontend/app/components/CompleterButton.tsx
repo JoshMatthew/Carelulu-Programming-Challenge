@@ -1,6 +1,6 @@
-import { redirect, useFetcher, useNavigate } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
 import { LoadingIcon } from "./LoadingIcon";
-import { API_OPERATIONS } from "~/lib/constants";
+import { API_OPERATIONS, FORM_NAME, FORM_METHOD } from "~/lib/constants";
 
 export default function CompleterButton({
   completed,
@@ -12,14 +12,18 @@ export default function CompleterButton({
   const fetcher = useFetcher();
 
   return (
-    <fetcher.Form method="post" preventScrollReset className="mt-1">
+    <fetcher.Form method={FORM_METHOD.POST} preventScrollReset className="mt-1">
       <input
         type="hidden"
-        name="operation"
+        name={FORM_NAME.OPERATION}
         value={API_OPERATIONS.UPDATE_TASK_COMPLETION}
       />
-      <input type="hidden" name="completed" value={Number(!completed)} />
-      <input type="hidden" name="id" value={id} />
+      <input
+        type="hidden"
+        name={FORM_NAME.COMPLETED}
+        value={Number(!completed)}
+      />
+      <input type="hidden" name={FORM_NAME.ID} value={id} />
 
       <LoadingIcon
         fetcher={fetcher}

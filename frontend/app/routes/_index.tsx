@@ -8,7 +8,7 @@ import { useSearchParams } from "@remix-run/react";
 import {
   APP_ROUTES,
   AUTHENTICATOR,
-  FORM_FIELD,
+  FORM_NAME,
   HTTP_HEADER,
   SESSION,
   SESSION_COOKIE,
@@ -31,7 +31,7 @@ export default function Index() {
 export const action: ActionFunction = async ({ request, params }) => {
   const clonedRequest = request.clone();
   const formData = await clonedRequest.formData();
-  const operation = formData.get(FORM_FIELD.OPERATION);
+  const operation = formData.get(FORM_NAME.OPERATION);
 
   try {
     let user;

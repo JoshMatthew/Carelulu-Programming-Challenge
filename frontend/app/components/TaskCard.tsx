@@ -1,9 +1,7 @@
 import { formatDateToCustomString } from "~/lib/helpers";
 import CompleterButton from "./CompleterButton";
 import { NavLink } from "@remix-run/react";
-import { ReactNode } from "react";
 import Tag from "./Tag";
-import { useToggle } from "./ToggleContentContext";
 import { APP_ROUTES } from "~/lib/constants";
 
 export default function TaskCard({
@@ -17,8 +15,6 @@ export default function TaskCard({
   createdAt: string;
   id: string;
 }) {
-  const { isOn } = useToggle();
-
   return (
     <NavLink
       to={`${APP_ROUTES.TASK}/${id}`}
@@ -27,7 +23,7 @@ export default function TaskCard({
         (isActive
           ? `border-2 border-[#0e4747]`
           : `border-2 border-transparent hover:bg-[#35bbbb]`) +
-        ` ${completed ? "completed hover:bg-[#858585]" : "hover:bg-[#35bbbb]"} flex w-full flex-col items-start rounded-md bg-[#23aaaa] p-4 px-6 text-white transition-all duration-500 ease-in-out hover:cursor-pointer md:w-auto md:max-w-[400px]`
+        ` ${completed ? "completed hover:bg-[#858585]" : "hover:bg-[#35bbbb]"} flex w-full flex-col items-start overflow-hidden rounded-md bg-[#23aaaa] p-4 px-6 text-white transition-all duration-500 ease-in-out hover:cursor-pointer md:w-auto md:max-w-[400px]`
       }
     >
       <div className="flex items-start gap-2">

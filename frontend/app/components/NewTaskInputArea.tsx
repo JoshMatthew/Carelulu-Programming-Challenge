@@ -2,7 +2,13 @@ import { useFetcher } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { MdFormatListBulletedAdd } from "react-icons/md";
 import { LoadingIcon } from "./LoadingIcon";
-import { API_OPERATIONS } from "~/lib/constants";
+import {
+  API_OPERATIONS,
+  FETCHER_STATE,
+  FORM_NAME,
+  FORM_METHOD,
+  TASK_VALIDATION,
+} from "~/lib/constants";
 
 export default function NewTaskInputArea() {
   const newTaskFetcher = useFetcher();
@@ -10,7 +16,7 @@ export default function NewTaskInputArea() {
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    if (newTaskFetcher.state === "idle") {
+    if (newTaskFetcher.state === FETCHER_STATE.IDLE) {
       formRef.current?.reset();
     }
   }, [newTaskFetcher.state]);
@@ -18,27 +24,28 @@ export default function NewTaskInputArea() {
   return (
     <div className="sticky bottom-0 flex w-full flex-col items-center justify-center bg-white p-4 md:w-auto">
       <newTaskFetcher.Form
-        method="post"
+        method={FORM_METHOD.POST}
         ref={formRef}
         preventScrollReset
-        className="mx-auto flex w-full justify-center overflow-hidden border-2 border-[#4FBBBB] @md:w-auto @md:rounded-md"
+        className="mx-auto flex w-full justify-center overflow-hidden border-2 border-[#4FBBBB] md:w-auto md:rounded-md"
       >
         <input
           type="hidden"
-          name="operation"
+          name={FORM_NAME.OPERATION}
           value={API_OPERATIONS.CREATE_TASK}
         />
         <input
-          name="taskTitle"
+          name={FORM_NAME.TASK_TITLE}
           type="text"
           className="w-full border-none bg-[#ffffff] px-4 py-2 font-lexend text-black outline-none focus:border-none"
           placeholder="Add new task"
+          maxLength={TASK_VALIDATION.TITLE_MAX_LENGTH}
         />
         <button
           type="submit"
           disabled={
-            newTaskFetcher.state === "submitting" ||
-            newTaskFetcher.state === "loading"
+            newTaskFetcher.state === FETCHER_STATE.SUBMITTING ||
+            newTaskFetcher.state === FETCHER_STATE.LOADING
           }
           className="bg-white px-4 py-[0.1rem] text-[#4FBBBB] hover:bg-[#4FBBBB] hover:text-white"
         >
@@ -51,13 +58,13 @@ export default function NewTaskInputArea() {
         </button>
       </newTaskFetcher.Form>
       <deleteTaskFetcher.Form
-        method="post"
+        method={FORM_METHOD.POST}
         preventScrollReset
         className="bg-none font-lexend"
       >
         <input
           type="hidden"
-          name="operation"
+          name={FORM_NAME.OPERATION}
           value={API_OPERATIONS.DELETE_ALL_COMPLETED}
         />
         <button

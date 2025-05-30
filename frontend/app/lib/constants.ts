@@ -3,6 +3,11 @@ export const LOCAL_API = "localhost:3000";
 export enum APP_ROUTES {
   HOME = "/",
   TASK = "/task",
+  LOGOUT = "/logout",
+}
+
+export enum TASK_VALIDATION {
+  TITLE_MAX_LENGTH = 45,
 }
 
 export enum API_OPERATIONS {
@@ -16,11 +21,14 @@ export enum API_OPERATIONS {
   SIGN_UP = "sign-up",
 }
 
-export enum FORM_FIELD {
+export enum FORM_NAME {
   USER_NAME = "email",
   PASSWORD = "password",
   COMPLETED = "completed",
   OPERATION = "operation",
+  ID = "id",
+  TASK_TITLE = "taskTitle",
+  TASK_DESCRIPTION = "taskDescription",
 }
 
 export enum AUTHENTICATOR {

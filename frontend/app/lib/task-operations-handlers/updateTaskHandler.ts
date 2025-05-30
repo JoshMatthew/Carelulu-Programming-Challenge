@@ -1,13 +1,14 @@
 import { UpdateTaskMutation } from "~/lib/graphql";
 import { GraphQLClient } from "graphql-request";
+import { FORM_NAME } from "../constants";
 
 export async function updateTaskHandler(
   formData: FormData,
-  gqlClient: GraphQLClient
+  gqlClient: GraphQLClient,
 ) {
-  const title = formData.get("taskTitle");
-  const description = formData.get("taskDescription");
-  const id = formData.get("id");
+  const title = formData.get(FORM_NAME.TASK_TITLE);
+  const description = formData.get(FORM_NAME.TASK_DESCRIPTION);
+  const id = formData.get(FORM_NAME.ID);
 
   if (
     typeof title !== "string" ||

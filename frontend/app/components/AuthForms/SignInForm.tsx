@@ -10,7 +10,7 @@ import {
   API_OPERATIONS,
   APP_ROUTES,
   FETCHER_STATE,
-  FORM_FIELD,
+  FORM_NAME,
   FORM_METHOD,
 } from "~/lib/constants";
 
@@ -97,12 +97,12 @@ export const SignInForm = () => {
       >
         <input
           type="hidden"
-          name={FORM_FIELD.OPERATION}
+          name={FORM_NAME.OPERATION}
           value={API_OPERATIONS.SIGN_IN}
         />
 
         <InputField
-          name={FORM_FIELD.USER_NAME}
+          name={FORM_NAME.USER_NAME}
           type="text"
           value={formData.email}
           changeHandler={handleChange}
@@ -112,7 +112,7 @@ export const SignInForm = () => {
         />
 
         <InputField
-          name={FORM_FIELD.PASSWORD}
+          name={FORM_NAME.PASSWORD}
           type="password"
           value={formData.password}
           changeHandler={handleChange}

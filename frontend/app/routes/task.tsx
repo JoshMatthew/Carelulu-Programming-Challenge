@@ -3,7 +3,6 @@ import type {
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
-import { Outlet } from "@remix-run/react";
 import NewTaskInputArea from "~/components/NewTaskInputArea";
 import { GetAllTasksQuery } from "~/lib/graphql";
 import { getAuthenticatedGqlClient } from "~/lib/graphql-client";
@@ -20,27 +19,21 @@ import {
 import { GraphQLClient } from "graphql-request";
 import { TaskList } from "~/components/TaskList";
 import { TaskDetail } from "~/components/TaskDetail";
-import { API_OPERATIONS } from "~/lib/constants";
+import { API_OPERATIONS, FORM_NAME } from "~/lib/constants";
 
-export const meta: MetaFunction<
-  typeof loader,
-  { "routes/task": TaskLoader }
-> = ({ data }: { data: { user: User } }) => {
-  return [
-    {
-      title: `${data.user.username || "User"} | CareLuLu Programming Challenge`,
-    },
-    {
-      property: "og:title",
-      content: "Task creator challenge",
-    },
-    {
-      name: "description",
-      content:
-        "This is an authorized route that showcases the tasks for a specific user.",
-    },
-  ];
-};
+export default function Tasks() {
+  return (
+    <main
+      className={`mx-auto flex w-full max-w-[1920px] flex-grow flex-col items-center justify-center gap-4 px-8 py-16`}
+    >
+      <TaskDetail />
+
+      <TaskList />
+
+      <NewTaskInputArea />
+    </main>
+  );
+}
 
 export const loader: LoaderFunction = async (args) => {
   const user: User = await authenticateUser(args.request);
@@ -55,13 +48,11 @@ export const loader: LoaderFunction = async (args) => {
   };
 };
 
-type TaskLoader = typeof loader;
-
 export const action: ActionFunction = async ({ request }) => {
   const user: User = await authenticateUser(request);
 
   const formData = await request.formData();
-  const operation = formData.get("operation");
+  const operation = formData.get(FORM_NAME.OPERATION);
   const authenticatedGqlClient = getAuthenticatedGqlClient(user.token);
 
   const handlers: Record<
@@ -88,16 +79,23 @@ export const action: ActionFunction = async ({ request }) => {
   }
 };
 
-export default function Tasks() {
-  return (
-    <main
-      className={`mx-auto flex w-full max-w-[1920px] flex-grow flex-col items-center justify-center gap-4 px-8 py-16`}
-    >
-      <TaskDetail />
-
-      <TaskList />
-
-      <NewTaskInputArea />
-    </main>
-  );
-}
+export const meta: MetaFunction<typeof loader, any> = ({
+  data,
+}: {
+  data: { user: User };
+}) => {
+  return [
+    {
+      title: `${data.user.username || "User"} | CareLuLu Programming Challenge`,
+    },
+    {
+      property: "og:title",
+      content: "Task creator challenge",
+    },
+    {
+      name: "description",
+      content:
+        "This is an authorized route that showcases the tasks for a specific user.",
+    },
+  ];
+};

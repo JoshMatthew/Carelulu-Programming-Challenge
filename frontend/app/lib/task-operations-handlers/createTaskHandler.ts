@@ -1,11 +1,12 @@
 import { CreateTaskMutation } from "~/lib/graphql";
 import { GraphQLClient } from "graphql-request";
+import { FORM_NAME } from "../constants";
 
 export async function createTaskHandler(
   formData: FormData,
-  gqlClient: GraphQLClient
+  gqlClient: GraphQLClient,
 ) {
-  const title = formData.get("taskTitle");
+  const title = formData.get(FORM_NAME.TASK_TITLE);
   if (typeof title !== "string" || !title.trim()) {
     return new Response("Invalid task title", { status: 400 });
   }

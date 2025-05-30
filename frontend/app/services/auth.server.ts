@@ -7,7 +7,7 @@ import { gqlClient } from "~/lib/graphql-client";
 import {
   APP_ROUTES,
   AUTHENTICATOR,
-  FORM_FIELD,
+  FORM_NAME,
   HTTP_HEADER,
   SESSION,
   SESSION_COOKIE,
@@ -141,8 +141,8 @@ export async function logoutUser(request: Request) {
 
 authenticator.use(
   new FormStrategy(async ({ form }) => {
-    const username = form.get(FORM_FIELD.USER_NAME) as string;
-    const password = form.get(FORM_FIELD.PASSWORD) as string;
+    const username = form.get(FORM_NAME.USER_NAME) as string;
+    const password = form.get(FORM_NAME.PASSWORD) as string;
 
     if (!username || !password) {
       throw new Error("Username and password are required");
@@ -156,8 +156,8 @@ authenticator.use(
 
 authenticator.use(
   new FormStrategy(async ({ form }) => {
-    const username = form.get(FORM_FIELD.USER_NAME) as string;
-    const password = form.get(FORM_FIELD.PASSWORD) as string;
+    const username = form.get(FORM_NAME.USER_NAME) as string;
+    const password = form.get(FORM_NAME.PASSWORD) as string;
 
     if (!username || !password) {
       throw new Error("Username and password are required");

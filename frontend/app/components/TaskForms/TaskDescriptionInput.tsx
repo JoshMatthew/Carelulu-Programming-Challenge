@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTaskEditContext } from "./TaskEditContext";
+import { FORM_NAME } from "~/lib/constants";
 
 const TaskDescriptionInput: React.FC = () => {
   const {
@@ -33,7 +34,7 @@ const TaskDescriptionInput: React.FC = () => {
       onBlur={() => setIsDescFocused(false)}
       spellCheck={isDescFocused}
       placeholder="Task description"
-      name="taskDescription"
+      name={FORM_NAME.TASK_DESCRIPTION}
     />
   );
 };

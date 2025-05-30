@@ -1,5 +1,4 @@
-// app/context/ToggleContentContext.tsx
-import { createContext, useContext, ReactNode, useState } from "react";
+import { createContext, useContext, ReactNode } from "react";
 import {
   redirect,
   useLocation,

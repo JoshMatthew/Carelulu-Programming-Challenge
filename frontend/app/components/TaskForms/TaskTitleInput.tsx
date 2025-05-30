@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useTaskEditContext } from "./TaskEditContext";
+import { FORM_NAME, TASK_VALIDATION } from "~/lib/constants";
 
 const TaskTitleInput: React.FC = () => {
   const {
@@ -23,8 +24,10 @@ const TaskTitleInput: React.FC = () => {
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
-    if (newValue.length > 60) {
-      setTitleError("Title cannot exceed 60 characters.");
+    if (newValue.length > TASK_VALIDATION.TITLE_MAX_LENGTH) {
+      setTitleError(
+        `Title cannot exceed ${TASK_VALIDATION.TITLE_MAX_LENGTH} characters.`,
+      );
     } else {
       setTitleError("");
       setTitleValue(newValue);
@@ -50,8 +53,8 @@ const TaskTitleInput: React.FC = () => {
         onBlur={handleBlur}
         className="resize-none overflow-hidden bg-[#fdfdfd] pb-4 font-lexend text-[2.2rem] leading-tight tracking-tight text-[#008088] outline-none md:text-[3.5rem]"
         placeholder="Enter task title"
-        name="taskTitle"
-        maxLength={60}
+        name={FORM_NAME.TASK_TITLE}
+        maxLength={TASK_VALIDATION.TITLE_MAX_LENGTH}
       />
       {titleError && (
         <p className="-mt-[1rem] mb-[1rem] font-lexend text-sm text-red-500">
