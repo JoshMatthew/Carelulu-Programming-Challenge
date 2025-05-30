@@ -51,8 +51,8 @@ Optional but helpful tools:
 Go to your working directory/folder, open your favorite programming terminal there (but I recommend GitBash for Windows) and paste the code below
 
 ```bash
-git clone https://github.com/JoshMatthew/Carelulu-Programming-Challenge.git
-cd Carelulu-Programming-Challenge
+git clone https://github.com/JoshMatthew/Programming-Challenge.git
+cd Programming-Challenge
 ```
 
 ---
@@ -129,7 +129,7 @@ npm run migrate-dev
 
 ### Install dependencies
 
-Open a **separate terminal but still inside the `Carelulu-Programming-Challenge/` folder** and paste or type these:
+Open a **separate terminal but still inside the `Programming-Challenge/` folder** and paste or type these:
 
 ```bash
 cd frontend
