@@ -28,12 +28,18 @@ export const authenticator = new Authenticator<User>();
 
 async function signIn(username: string, password: string): Promise<User> {
   try {
-    const result = await gqlClient.request(SigninUserMutation, {
-      data: {
-        username,
-        password,
+    const result = await gqlClient.request(
+      SigninUserMutation,
+      {
+        data: {
+          username,
+          password,
+        },
       },
-    });
+      {
+        "x-api-key": process.env.API_KEY || "",
+      },
+    );
 
     if (!result)
       return {
@@ -58,12 +64,18 @@ async function signUp(username: string, password: string): Promise<User> {
   try {
     const result: {
       signUp: any;
-    } = await gqlClient.request(SignupUserMutation, {
-      data: {
-        username,
-        password,
+    } = await gqlClient.request(
+      SignupUserMutation,
+      {
+        data: {
+          username,
+          password,
+        },
       },
-    });
+      {
+        "x-api-key": process.env.API_KEY || "",
+      },
+    );
 
     if (!result)
       return {
@@ -96,7 +108,16 @@ async function signUp(username: string, password: string): Promise<User> {
 
 function checkAndReturnError(e: unknown) {
   if (e instanceof Error) {
-    const errorMessage = e.message.slice(0, e.message.indexOf(":"));
+    let errorMessage = "";
+
+    if (e.message.includes("400")) {
+      errorMessage = "No API KEY provided";
+    } else if (e.message.includes("403")) {
+      errorMessage = "API KEY invalid";
+    } else {
+      errorMessage = e.message.slice(0, e.message.indexOf(":"));
+    }
+
     return {
       token: "",
       id: "",

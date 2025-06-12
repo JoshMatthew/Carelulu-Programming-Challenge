@@ -10,8 +10,14 @@ export async function createTaskHandler(
   if (typeof title !== "string" || !title.trim()) {
     return new Response("Invalid task title", { status: 400 });
   }
-  await gqlClient.request(CreateTaskMutation, {
-    data: { taskTitle: title },
-  });
+  await gqlClient.request(
+    CreateTaskMutation,
+    {
+      data: { taskTitle: title },
+    },
+    {
+      "x-api-key": process.env.API_KEY || "",
+    },
+  );
   return new Response("Operation Success", { status: 200 });
 }

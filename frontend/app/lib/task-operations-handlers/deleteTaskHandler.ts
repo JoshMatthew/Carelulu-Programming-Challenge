@@ -12,9 +12,15 @@ export async function deleteTaskHandler(
     return new Response("Invalid ID", { status: 400 });
   }
 
-  await gqlClient.request(DeleteTaskMutation, {
-    deleteTaskId: Number(id),
-  });
+  await gqlClient.request(
+    DeleteTaskMutation,
+    {
+      deleteTaskId: Number(id),
+    },
+    {
+      "x-api-key": process.env.API_KEY || "",
+    },
+  );
 
   return new Response("Operation Success", { status: 200 });
 }

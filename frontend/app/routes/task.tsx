@@ -40,7 +40,13 @@ export const loader: LoaderFunction = async (args) => {
 
   const { allTask }: { allTask: Task[] } = await getAuthenticatedGqlClient(
     user.token,
-  ).request(GetAllTasksQuery);
+  ).request(
+    GetAllTasksQuery,
+    {},
+    {
+      "x-api-key": process.env.API_KEY || "",
+    },
+  );
 
   return {
     user,

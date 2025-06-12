@@ -19,13 +19,19 @@ export async function updateTaskHandler(
     return new Response("Invalid input", { status: 400 });
   }
 
-  await gqlClient.request(UpdateTaskMutation, {
-    data: {
-      id,
-      taskTitle: title,
-      taskDescription: description,
+  await gqlClient.request(
+    UpdateTaskMutation,
+    {
+      data: {
+        id,
+        taskTitle: title,
+        taskDescription: description,
+      },
     },
-  });
+    {
+      "x-api-key": process.env.API_KEY || "",
+    },
+  );
 
   return new Response("Operation Success", { status: 200 });
 }
